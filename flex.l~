@@ -63,7 +63,7 @@ return(NUMBER);
 "fim" return(END);
 
 (?# Pontuação)
-"," return(COMMA);
+"," return(COMMON);
 "\"" return(QUOTES);
 ";" return(SEMICOLON);
 ":" return(COLON);

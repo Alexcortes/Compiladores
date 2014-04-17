@@ -9,7 +9,7 @@
 
 // These tokens refer to the language punctuation
 %token LEFT_PARENTHESIS RIGHT_PARENTHESIS
-%token END BEGIN
+%token END
 %token COMMA QUOTES SEMICOLON COLON NEWLINE
 
 // These tokens refer to the function of the language
@@ -25,9 +25,6 @@
 
 // These tokens refer to control struct
 %token IF ENDIF ELSE
-
-//These tokens refer to loop struct
-%token DO WHILE FOR ENDWHILE ENDDO ENDFOR
 
 %%
 /* Rules */
