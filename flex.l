@@ -1,10 +1,12 @@
-%{
+﻿%{
 #include "global.h"
 #include "sintatico.h"
 #include <stdlib.h>
 %}
-
+TRUE [1]|"verdadeiro"
+FALSE [0]|"falso"
 DIGIT [0-9]
+BOOLEAN {TRUE}|{FALSE}
 INTEGER -?{DIGIT}+
 FLOAT {INTEGER}("."{INTEGER})?
 STRING [a - zA - Z0 - 9][a - zA - Z0 - 9]*
@@ -46,7 +48,8 @@ return(NUMBER);
 "literal" return(T_STRING);
 "inteiro" return(T_INT);
 "real" return(T_FLOAT);
-"caractere return(T_CHAR)"
+"caractere" return(T_CHAR)"
+"lógico"  return(T_BOOLEAN);
  
 (?# Estruturas da linguagem)
 "se" return(IF);
@@ -75,7 +78,7 @@ FLOAT return(FLOAT);
 STRING return(STRING);
 VARIABLE return(VARIABLE);
 CHAR return(CHAR);
-
+BOOLEAN return(BOOLEAN);
 %%
 
 yywrap () {

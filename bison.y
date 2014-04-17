@@ -16,8 +16,8 @@
 %token PRINTF
 
 // These tokens refer to the language types
-%token STRING FLOAT INT VARIABLE CHAR
-%token T_STRING T_INT T_FLOAT T_CHAR
+%token STRING FLOAT INT VARIABLE CHAR BOOLEAN
+%token T_STRING T_INT T_FLOAT T_CHAR T_BOOLEAN
 
 // These tokens refer to the language operators
 %token EQUALS DIFERENT BIGGER SMALLER BIGGEREQUAL SMALLEREQUAL
