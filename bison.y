@@ -46,6 +46,15 @@ output:
 	PRINTF LEFT_PARANTHESIS content RIGHT_PARENTHESIS SEMICOLON
 	;
 
-// These rules definen Boolean tests for simple conditions such as equal, greater than or less than
-	 
+// These rules define Boolean tests for simple conditions such as equal, greater than or less than
+logical_expression:
+	 VARIABLE
+	 | logical_expression EQUALS logical_expression
+	 | logical_expression DIFERENT logical_expression
+	 | logical_expression BIGGER logical_expression
+	 | logical_expression SMALLER logical_expression
+	 | logical_expression BIGGEREQUAL logical_expression
+	 | logical_expression SMALLEREQUAL logical_expression
+	 | LEFT_PARANTHESIS logical_expression RIGHT_PARANTHESIS
+	 ;
 %%
