@@ -49,7 +49,7 @@ content:
 
 // This rule define the function printf(  )
 output:
-	PRINTF LEFT_PARANTHESIS content RIGHT_PARENTHESIS SEMICOLON
+	PRINTF LEFT_PARENTHESIS content RIGHT_PARENTHESIS SEMICOLON
 	;
 
 // These rules define Boolean tests for simple conditions such as equal, greater than or less than
@@ -61,6 +61,6 @@ logical_expression:
 	 | logical_expression SMALLER logical_expression
 	 | logical_expression BIGGEREQUAL logical_expression
 	 | logical_expression SMALLEREQUAL logical_expression
-	 | LEFT_PARANTHESIS logical_expression RIGHT_PARANTHESIS
+	 | LEFT_PARENTHESIS logical_expression RIGHT_PARENTHESIS
 	 ;
 %%

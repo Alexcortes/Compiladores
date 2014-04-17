@@ -1,8 +1,9 @@
 ﻿%{
 #include "global.h"
-#include "sintatico.h"
+#include "bison.h"
 #include <stdlib.h>
 %}
+
 TRUE [1]|"verdadeiro"
 FALSE [0]|"falso"
 DIGIT [0-9]
