@@ -5,8 +5,8 @@
 %}
 
 DIGIT [0-9]
-INTEGER -?{digit}+
-FLOAT {integer}("."{integer})?{exponant}?
+INTEGER -?{DIGIT}+
+FLOAT {INTEGER}("."{INTEGER})?
 STRING [a - zA - Z0 - 9][a - zA - Z0 - 9]*
 WHITESPACE [\n\r\t]+
 VARIABLE _?[a - zA - Z][a - zA - Z0 - 9]*
@@ -14,13 +14,13 @@ CHAR [a - zA - Z]
 
 %%
 
-{white} { /* We ignore white characters */ }
+{WHITESPACE} { /*We ignore white characters*/ }
 {FLOAT} {
 yylval=atof(yytext);
 return(NUMBER);
 }
 
-/* Expressoes matematicas */
+(?# Expressoes matematicas)
 "+" return(PLUS);
 "-" return(MINUS);
 "*" return(TIMES);
@@ -29,9 +29,9 @@ return(NUMBER);
 "(" return(LEFT_PARENTHESIS);
 ")" return(RIGHT_PARENTHESIS);
 
-"\n" return(END);
+"\n" return(NEWLINE);
 
-/* Expressoes de comparacao*/
+(?# Expressoes de comparacao)
 "=" return(EQUALS);
 "<>" return(DIFERENT);
 ">" return(BIGGER);
@@ -39,16 +39,16 @@ return(NUMBER);
 "<=" return(SMALLEREQUAL);
 ">=" return(BIGGEREQUAL);
 
-/* Entrada saída de dados */
+(?# Entrada saída de dados) 
 "escreva" return(PRINTF);
 
-/* Tipos de variáveis */
+(?# Tipos de variáveis)
 "literal" return(T_STRING);
 "inteiro" return(T_INT);
 "real" return(T_FLOAT);
 "caractere return(T_CHAR)"
  
-/* Estruturas da linguagem*/
+(?# Estruturas da linguagem)
 "se" return(IF);
 "senao" return(ELSE);
 "fim-se" return(ENDIF);
@@ -63,13 +63,13 @@ return(NUMBER);
 "inicio" return(BEGIN);
 "fim" return(END);
 
-/* Pontuação */
+(?# Pontuação)
 "," return(COMMON);
-""" return(QUOTES);
+"\"" return(QUOTES);
 ";" return(SEMICOLON);
 ":" return(COLON);
 
-/* Definições */
+(?# Definições)
 INTEGER return(INT);
 FLOAT return(FLOAT);
 STRING return(STRING);
