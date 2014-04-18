@@ -1,4 +1,4 @@
-﻿%{
+%{
 #include "global.h"
 #include "bison.h"
 #include <stdlib.h>
