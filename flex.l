@@ -9,7 +9,7 @@ FALSE [0]|"falso"
 DIGIT [0-9]
 BOOLEAN {TRUE}|{FALSE}
 INTEGER -?{DIGIT}+
-FLOAT {INTEGER}("."{INTEGER})?
+FLOAT -?{INTEGER}("."{INTEGER})?
 STRING [a - zA - Z0 - 9][a - zA - Z0 - 9]*
 WHITESPACE [\n\r\t]+
 VARIABLE _?[a - zA - Z][a - zA - Z0 - 9]*
@@ -28,6 +28,7 @@ return(NUMBER);
 "-" return(MINUS);
 "*" return(TIMES);
 "/" return(DIVIDE);
+"=" return(EQUAL);
 "(" return(LEFT_PARENTHESIS);
 ")" return(RIGHT_PARENTHESIS);
 
@@ -43,6 +44,7 @@ return(NUMBER);
 
 (?# Entrada saida de dados) 
 "escreva" return(PRINTF);
+"leia" return(SCANF);
 
 (?# Tipos de variáveis)
 "literal" return(T_STRING);
@@ -55,13 +57,15 @@ return(NUMBER);
 "se" return(IF);
 "senao" return(ELSE);
 "fim-se" return(ENDIF);
+"fim-senao" return(ENDELSE);
+"entao" return (THEN);
 
 "faca" return(DO);
-"enquanto" return(WHILE);
-"fim-enquanto" return(ENDWHILE);
 "fim-faca" return(ENDDO);
 "para" return(FOR);
 "fim-para" return(ENDFOR);
+"enquanto" return(WHILE);
+"fim-enquanto" return(ENDWHILE);
 
 "inicio" return(BEGIN);
 "fim" return(END);
@@ -71,6 +75,7 @@ return(NUMBER);
 "\"" return(QUOTES);
 ";" return(SEMICOLON);
 ":" return(COLON);
+":=" return(ATTRIBUTION);
 
 (?# Definições)
 INTEGER return(INT);
