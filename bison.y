@@ -65,6 +65,7 @@ input:
 	;
 
 // These rules define expressions:
+logical_expression:
 	 VARIABLE
 	 | logical_expression EQUALS logical_expression
 	 | logical_expression DIFERENT logical_expression
@@ -77,7 +78,7 @@ input:
 
 math_expressions:
 	FLOAT
-	|INTEGER
+	|INT
 	|VARIABLE
 	|math_expressions PLUS math_expressions 
 	|math_expressions MINUS math_expressions
