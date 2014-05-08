@@ -11,7 +11,7 @@
 %token COMMA QUOTES SEMICOLON COLON NEWLINE
 
 // These tokens refer to the function of the language
-%token PRINTF SCANF
+%token PRINTF SCANF NUMBER ATTRIBUTION
 
 // These tokens refer to the language types
 %token STRING FLOAT INT VARIABLE CHAR BOOLEAN
@@ -21,10 +21,10 @@
 %token EQUALS DIFERENT BIGGER SMALLER BIGGEREQUAL SMALLEREQUAL
 %token PLUS MINUS DIVIDE TIMES EQUAL
 
-// These tokens refer to control struct
+// These tokens refer to control structure
 %token IF ENDIF ELSE ENDELSE THEN
 
-//These tokens refer to loop struct
+//These tokens refer to loop structure
 %token DO WHILE FOR ENDWHILE ENDDO ENDFOR
 
 %%

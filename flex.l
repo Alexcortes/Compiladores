@@ -50,7 +50,7 @@ return(NUMBER);
 "literal" return(T_STRING);
 "inteiro" return(T_INT);
 "real" return(T_FLOAT);
-"caractere" return(T_CHAR)"
+"caractere" return(T_CHAR);
 "lógico"  return(T_BOOLEAN);
  
 (?# Estruturas da linguagem)
