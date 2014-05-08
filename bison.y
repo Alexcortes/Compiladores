@@ -7,7 +7,7 @@
 
 // These tokens refer to the language punctuation
 %token LEFT_PARENTHESIS RIGHT_PARENTHESIS
-%token END BEGIN
+%token END START
 %token COMMA QUOTES SEMICOLON COLON NEWLINE
 
 // These tokens refer to the function of the language
@@ -127,6 +127,6 @@ content_program:
 	;
 
 program:
-	BEGIN content_program END
+	START content_program END
 	;
 %%

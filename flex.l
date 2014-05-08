@@ -67,7 +67,7 @@ return(NUMBER);
 "enquanto" return(WHILE);
 "fim-enquanto" return(ENDWHILE);
 
-"inicio" return(BEGIN);
+"inicio" return(START);
 "fim" return(END);
 
 (?# Pontuação)
