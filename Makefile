@@ -4,7 +4,7 @@ portugolC: flex.l bison.y
 	mv bison.tab.c bison.c
 	flex flex.l
 	mv lex.yy.c flex.c
-	gcc -o portugolC bison.c flex.c -lm -lfl
+	gcc -o portugolC bison.c flex.c -lm
 
 clean:
 	rm flex.* bison.* portugolC.exe
