@@ -131,3 +131,11 @@ program:
 	START content_program END
 	;
 %%
+
+int yyerror(char *s) {
+   printf("%s\n",s);
+}
+
+int main(void) {
+   yyparse();
+}
