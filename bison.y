@@ -1,135 +1,39 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
 %}
 
-/* Tokens */
+%union{
+	int   integer;
+	char *text;
+}
 
-// These tokens refer to the language punctuation
-%token LEFT_PARENTHESIS RIGHT_PARENTHESIS
-%token END START
-%token COMMA QUOTES SEMICOLON COLON NEWLINE
-
-// These tokens refer to the function of the language
-%token PRINTF SCANF NUMBER ATTRIBUTION
-
-// These tokens refer to the language types
-%token STRING FLOAT INT VARIABLE CHAR BOOLEAN
-%token T_STRING T_INT T_FLOAT T_CHAR T_BOOLEAN
-
-// These tokens refer to the language operators
-%token EQUALS DIFERENT BIGGER SMALLER BIGGEREQUAL SMALLEREQUAL
-%token PLUS MINUS DIVIDE TIMES EQUAL
-
-// These tokens refer to control structure
-%token IF ENDIF ELSE ENDELSE THEN
-
-//These tokens refer to loop structure
-%token DO WHILE FOR ENDWHILE ENDDO ENDFOR
+%token<text> TYPE_STRING
+%token<text> TYPE_INT
+%token<text> TYPE_CHAR
+%token<text> TYPE_FLOAT
+%token<text> COLON
+%token<text> VARIABLE
+%token INT
+%token CHAR
 
 %%
-/* Rules */
-// These rules is about the definitions of the variables
-definitions:
-	VARIABLE COLON T_STRING
-	| VARIABLE COLON T_INT
-	| VARIABLE COLON T_FLOAT
-	| VARIABLE COLON T_CHAR
-	;
 
-// The rules define attribution
 attribution:
-	VARIABLE EQUAL VARIABLE
-	|VARIABLE EQUAL INT
-	|VARIABLE EQUAL FLOAT
-	|VARIABLE EQUAL STRING
-	|VARIABLE EQUAL CHAR
-	|VARIABLE EQUAL BOOLEAN
-	;
+	VARIABLE COLON TYPE_CHAR { 
+		printf("char %s;", $1);
 
-// These rules define what is a content. It's used specially in the strings
-content:
-	QUOTES STRING QUOTES
-	| VARIABLE
-	| VARIABLE COMMA content
-	| QUOTES STRING QUOTES COMMA content
-	;
+	} | VARIABLE COLON TYPE_STRING { 
+			printf("string %s;", $1);
 
-// These rules define the function printf(  ) and scanf( )
-output:
-	PRINTF LEFT_PARENTHESIS content RIGHT_PARENTHESIS SEMICOLON
-	;
+	} | VARIABLE COLON TYPE_INT { 
+			printf("int %s;", $1);
 
-input:
-	VARIABLE SCANF LEFT_PARENTHESIS RIGHT_PARENTHESIS SEMICOLON
-	;
+	} | VARIABLE COLON TYPE_FLOAT {
+			printf("float %s;", $1);
+	};
 
-// These rules define expressions:
-logical_expression:
-	 VARIABLE
-	 | logical_expression EQUALS logical_expression
-	 | logical_expression DIFERENT logical_expression
-	 | logical_expression BIGGER logical_expression
-	 | logical_expression SMALLER logical_expression
-	 | logical_expression BIGGEREQUAL logical_expression
-	 | logical_expression SMALLEREQUAL logical_expression
-	 | LEFT_PARENTHESIS logical_expression RIGHT_PARENTHESIS
-	 ;
-
-math_expressions:
-	FLOAT
-	|INT
-	|VARIABLE
-	|math_expressions PLUS math_expressions 
-	|math_expressions MINUS math_expressions
-	|math_expressions DIVIDE math_expressions
-	|math_expressions TIMES math_expressions 
-	|math_expressions PLUS math_expressions EQUAL math_expressions
-	|math_expressions MINUS math_expressions EQUAL math_expressions
-	|math_expressions DIVIDE math_expressions EQUAL math_expressions
-	|math_expressions TIMES math_expressions  EQUAL math_expressions
-	;
-
-block_expressions:
-	math_expressions block_expressions
-	|condition_expressions block_expressions
-	|logical_expression block_expressions
-	|output block_expressions
-	|ENDIF
-	;
-
-condition_expressions:
-	IF LEFT_PARENTHESIS logical_expression RIGHT_PARENTHESIS THEN block_expressions ENDIF
-	|IF LEFT_PARENTHESIS math_expressions RIGHT_PARENTHESIS	THEN block_expressions ENDIF
-	|IF LEFT_PARENTHESIS logical_expression RIGHT_PARENTHESIS THEN block_expressions ENDIF condition_expressions
-	|IF LEFT_PARENTHESIS math_expressions RIGHT_PARENTHESIS	THEN block_expressions ENDIF condition_expressions
-	|ELSE block_expressions ENDELSE
-	|ELSE LEFT_PARENTHESIS logical_expression RIGHT_PARENTHESIS block_expressions ENDELSE
-	|ELSE LEFT_PARENTHESIS math_expressions RIGHT_PARENTHESIS block_expressions ENDELSE
-	;
-
-loop_expressions:
-	;
-
-//These rules define content's program
-content_program:
-	definitions
-	|definitions content_program
-	|attribution
-	|attribution content_program
-	|output
-	|output content_program
-	|logical_expression
-	|logical_expression content_program
-	|condition_expressions
-	|condition_expressions content_program	
-	|math_expressions 
-	|math_expressions content_program	
-	;
-
-program:
-	START content_program END
-	;
 %%
 
 int yyerror(char *s) {
