@@ -1,26 +1,36 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
-	#include <string.h>
 
 	#include "bison.h"
 %}
 
 DIGIT			[0-9]
+INTEGER		{DIGIT}+
+
 CHARACTER	[a-zA-Z]
 LITERAL		[a-zA-Z0-9][a-zA-Z0-9]*
 
 IDENTIFIER	_?[a-zA-Z0-9][a-zA-Z0-9]*
+WHITESPACE	[\n\r\t]+
 
-INTEGER		{DIGIT}+
+TRUE			[1]|"verdadeiro"
+FALSE			[0]|"falso"
+BOOLEAN		{TRUE}|{FALSE}
 
 %%
 
-"literal" return(TYPE_STRING);
-"inteiro" return(TYPE_INT);
+(?# Tipos de variáveis permitidas )
+"literal"	return(TYPE_STRING);
+"inteiro"	return(TYPE_INT);
 "caractere" return(TYPE_CHAR);
-"real" return(TYPE_FLOAT);
+"real"		return(TYPE_FLOAT);
+"lógico"		return(TYPE_BOOLEAN);
 
+(?# Funções para entrada e saída de dados )
+"escreva"	return(PRINTF);
+
+(?# Pontuação permitida )
 ":" return(COLON);
 
 {CHARACTER} {
@@ -28,9 +38,9 @@ INTEGER		{DIGIT}+
 	return CHAR;
 }
 
-{INTEGER} {
-	yylval.integer = atoi(yytext);
-	return INT;
+{LITERAL} {
+	yylval.text = strdup(yytext);
+	return STRING;
 }
 
 {IDENTIFIER} { 
