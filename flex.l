@@ -9,7 +9,7 @@ DIGIT			[0-9]
 INTEGER		{DIGIT}+
 
 CHARACTER	[a-zA-Z]
-LITERAL		[a-zA-Z0-9][a-zA-Z0-9]*
+LITERAL		\"[a-zA-Z0-9][a-zA-Z0-9].*\"
 
 IDENTIFIER	_?[a-zA-Z0-9][a-zA-Z0-9]*
 WHITESPACE	[\n\r\t]+
@@ -33,19 +33,14 @@ BOOLEAN		{TRUE}|{FALSE}
 (?# Pontuação permitida )
 ":" return(COLON);
 
-{CHARACTER} {
+{IDENTIFIER} { 
 	yylval.text = strdup(yytext);
-	return CHAR;
+	return VARIABLE;
 }
 
 {LITERAL} {
 	yylval.text = strdup(yytext);
 	return STRING;
-}
-
-{IDENTIFIER} { 
-	yylval.text = strdup(yytext);
-	return VARIABLE;
 }
 
 %%
