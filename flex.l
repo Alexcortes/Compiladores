@@ -12,7 +12,7 @@ CHARACTER	[a-zA-Z]
 LITERAL		\"[a-zA-Z0-9][a-zA-Z0-9].*\"
 
 IDENTIFIER	_?[a-zA-Z0-9][a-zA-Z0-9]*
-WHITESPACE	[\n\r\t]+
+WHITESPACE	[ ]+
 
 TRUE			[1]|"verdadeiro"
 FALSE			[0]|"falso"
@@ -29,9 +29,13 @@ BOOLEAN		{TRUE}|{FALSE}
 
 (?# Funções para entrada e saída de dados )
 "escreva"	return(PRINTF);
+"leia"		return(SCANF);
 
 (?# Pontuação permitida )
 ":" return(COLON);
+
+(?# Marcadores )
+"\n" return(NEWLINE);
 
 {IDENTIFIER} { 
 	yylval.text = strdup(yytext);
@@ -46,5 +50,5 @@ BOOLEAN		{TRUE}|{FALSE}
 %%
 
 yywrap () {
-return 0;
+	return 0;
 }
