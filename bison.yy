@@ -14,6 +14,7 @@
 
 %union{
 	int   integer;
+	float real;
 	char *text;
 }
 
@@ -25,8 +26,11 @@
 %token<text> COLON
 %token<text> VARIABLE
 %token<text> STRING
+%token<text> INT
+%token<text> FLOAT
 %token PRINTF
 %token SCANF
+%token ATTRIBUTION
 %token NEWLINE
 %token START
 %token END
@@ -45,6 +49,7 @@ content_program:
 	| begin_of_program
 	| end_of_program
 	| declaration
+	| attribution
 	| output
 	| input
 	;
@@ -85,9 +90,41 @@ declaration:
 		cout << "bool " << $<text>1 << ";";
 	};
 
+number:
+	INT {
+		$<text>$ = $1;
+
+	} | FLOAT {
+		$<text>$ = $1;
+
+	};
+
 text:
 	STRING {
 		$<text>$ = $1;
+	};
+
+value:
+	VARIABLE {
+	} | number
+	| text
+	;
+
+attribution:
+	VARIABLE ATTRIBUTION value {
+		string equal = " = ";
+		string semi_colon = ";";
+
+		string built_string = "";
+
+		built_string.append( $<text>1 );
+		built_string.append( equal );
+		built_string.append( $<text>3 );
+		built_string.append( semi_colon );
+
+		cout << built_string;
+
+		strcpy( $<text>$, built_string.c_str() );
 	};
 
 output:

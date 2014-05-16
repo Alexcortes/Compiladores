@@ -9,6 +9,7 @@
 
 DIGIT			[0-9]
 INTEGER		{DIGIT}+
+REAL			{DIGIT}+"."{DIGIT}+
 
 CHARACTER	[a-zA-Z]
 LITERAL		\"[a-zA-Z0-9][a-zA-Z0-9].*\"
@@ -35,6 +36,7 @@ BOOLEAN		{TRUE}|{FALSE}
 
 (?# Pontuação permitida )
 ":" return(COLON);
+":=" return(ATTRIBUTION);
 
 (?# Marcadores )
 "\n" return(NEWLINE);
@@ -49,6 +51,16 @@ BOOLEAN		{TRUE}|{FALSE}
 {LITERAL} {
 	yylval.text = strdup(yytext);
 	return STRING;
+}
+
+{INTEGER} {
+	yylval.text = strdup(yytext);
+	return INT;
+}
+
+{REAL} {
+	yylval.text = strdup(yytext);
+	return FLOAT;
 }
 
 %%
