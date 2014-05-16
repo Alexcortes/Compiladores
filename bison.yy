@@ -1,7 +1,15 @@
 %{
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <string.h>
+	#include <cstdio>
+	#include <cstdlib>
+	#include <cstring>
+
+	#include <iostream>
+	#include <string>
+
+	using namespace std;
+
+	int yylex(void);
+	void yyerror(const char *);
 %}
 
 %union{
@@ -39,7 +47,7 @@ content_program:
 
 declaration:
 	VARIABLE COLON TYPE_CHAR { 
-		printf( "char %s;", $<text>1 );
+		cout << "char " << $<text>1 << ";";
 
 	} | VARIABLE COLON TYPE_STRING { 
 			printf( "char *%s[];", $<text>1 );
@@ -95,10 +103,10 @@ input:
 
 %%
 
-int yyerror(char *s) {
-   printf( "%s\n",s );
-}
-
 int main(void) {
    yyparse();
 }
+
+	void yyerror (char const *s) {
+   	printf ("%s\n", s);
+	}

@@ -1,6 +1,8 @@
+%option noyywrap
+
 %{
-	#include <stdio.h>
-	#include <stdlib.h>
+	#include <cstdio>
+	#include <cstdlib>
 
 	#include "bison.h"
 %}
@@ -48,7 +50,3 @@ BOOLEAN		{TRUE}|{FALSE}
 }
 
 %%
-
-yywrap () {
-	return 0;
-}

@@ -1,10 +1,10 @@
-portugolC: flex.l bison.y
-	bison -d bison.y
-	mv bison.tab.h bison.h
-	mv bison.tab.c bison.c
-	flex flex.l
+portugolC: flex.ll bison.yy
+	bison -d bison.yy
+	mv bison.tab.hh bison.h
+	mv bison.tab.cc bison.c
+	flex flex.ll
 	mv lex.yy.c flex.c
-	gcc -o portugolC bison.c flex.c -lm
+	g++ -o portugolC bison.c flex.c -lm
 
 clean:
 	rm flex.* bison.* portugolC.exe
