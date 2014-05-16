@@ -73,16 +73,16 @@ declaration:
 		cout << "char " << $<text>1 << ";";
 
 	} | VARIABLE COLON TYPE_STRING { 
-			printf( "char *%s[];", $<text>1 );
+		cout << "char *" << $<text>1 << ";";
 
 	} | VARIABLE COLON TYPE_INT { 
-			printf( "int %s;", $<text>1 );
+		cout << "int " << $<text>1 << ";";
 
 	} | VARIABLE COLON TYPE_FLOAT {
-			printf( "float %s;", $<text>1 );
+		cout << "float " << $<text>1 << ";";
 
 	} | VARIABLE COLON TYPE_BOOLEAN {
-			printf( "bool %s;", $<text>1 );
+		cout << "bool " << $<text>1 << ";";
 	};
 
 text:
