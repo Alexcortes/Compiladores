@@ -38,6 +38,8 @@ BOOLEAN		{TRUE}|{FALSE}
 
 (?# Marcadores )
 "\n" return(NEWLINE);
+"inicio" return(START);
+"final" return(END);
 
 {IDENTIFIER} { 
 	yylval.text = strdup(yytext);

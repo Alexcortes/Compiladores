@@ -28,6 +28,8 @@
 %token PRINTF
 %token SCANF
 %token NEWLINE
+%token START
+%token END
 
 %start program
 
@@ -40,10 +42,31 @@ program:
 
 content_program:
 	NEWLINE { printf("\n"); }
+	| begin_of_program
+	| end_of_program
 	| declaration
 	| output
 	| input
 	;
+
+begin_of_program:
+	START {
+		cout << "#include<stdio.h>"  << endl
+			  << "#include<stdlib.h>" << endl
+			  << "#include<string.h>" << endl
+			  << "#include<math.h>"   << endl
+			  << endl;
+
+		cout << "int main(int argc, char *argv[])" << endl
+			  << "{";
+
+	};
+
+end_of_program:
+	END {
+		cout << "}" << endl;
+
+	};
 
 declaration:
 	VARIABLE COLON TYPE_CHAR { 
