@@ -92,18 +92,18 @@ text:
 
 output:
 	 PRINTF text {
-		char beginPrintf[]	= "printf(";
-		char endPrintf[]		= ");";
+		string beginPrintf = "printf(";
+		string endPrintf   = ");";
 		
-		char *stringPtr = ( char * )malloc(  strlen( beginPrintf )
-			+ strlen( $<text>2 ) + strlen( endPrintf ) + 1);
+		string builtString = "";
 		
-		strcpy( stringPtr, beginPrintf );
-		strcat( stringPtr, $<text>2 );
-		strcat( stringPtr, endPrintf );
+		builtString.append( beginPrintf );
+		builtString.append( $<text>2 );
+		builtString.append( endPrintf );
 		
-		printf( "%s", stringPtr );
-		$<text>$ = stringPtr;
+		cout << builtString << endl;
+
+		strcpy( $<text>$, builtString.c_str() );
 	};
 
 input:
