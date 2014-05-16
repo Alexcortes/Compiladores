@@ -145,20 +145,20 @@ output:
 
 input:
 	SCANF VARIABLE {
-		char begin_scanf[]	= "scanf(";
-		char end_scanf[]	= ");";
+		string begin_scanf = "scanf(";
+		string end_scanf     = ");";
 		
-		char *string_ptr = ( char * )malloc( strlen( begin_scanf )
-		+ strlen( $<text>2 ) + strlen( end_scanf ) + 1 );
+		string built_string = "";
 		
-		strcpy( string_ptr, begin_scanf );
-		strcat( string_ptr, $<text>2 );
-		strcat( string_ptr, end_scanf );
+		built_string.append( begin_scanf );
+		built_string.append( $<text>2 );
+		built_string.append( end_scanf );
 		
-		/* Deve-se capturar o tipo da variável para definir o tipo de leitura mais adequada.
-			Proponho utilizar uma struct com dois elementos para definir uma VARIABLE. */
-		printf( "%s", string_ptr );
-		$<text>$ = string_ptr;
+		/* TODO: Deve-se capturar o tipo da variável para definir o tipo de leitura mais adequada.
+				   Proponho utilizar uma struct com dois elementos para definir uma VARIABLE. */
+		cout << built_string << endl;
+
+		strcpy( $<text>$, built_string.c_str() );
 	};
 
 %%
