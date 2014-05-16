@@ -129,36 +129,36 @@ attribution:
 
 output:
 	 PRINTF text {
-		string beginPrintf = "printf(";
-		string endPrintf   = ");";
+		string begin_printf = "printf(";
+		string end_printf   = ");";
 		
-		string builtString = "";
+		string built_string = "";
 		
-		builtString.append( beginPrintf );
-		builtString.append( $<text>2 );
-		builtString.append( endPrintf );
+		built_string.append( begin_printf );
+		built_string.append( $<text>2 );
+		built_string.append( end_printf );
 		
-		cout << builtString << endl;
+		cout << built_string << endl;
 
-		strcpy( $<text>$, builtString.c_str() );
+		strcpy( $<text>$, built_string.c_str() );
 	};
 
 input:
 	SCANF VARIABLE {
-		char beginScanf[]	= "scanf(";
-		char endScanf[]	= ");";
+		char begin_scanf[]	= "scanf(";
+		char end_scanf[]	= ");";
 		
-		char *stringPtr = ( char * )malloc( strlen( beginScanf )
-		+ strlen( $<text>2 ) + strlen( endScanf ) + 1 );
+		char *string_ptr = ( char * )malloc( strlen( begin_scanf )
+		+ strlen( $<text>2 ) + strlen( end_scanf ) + 1 );
 		
-		strcpy( stringPtr, beginScanf );
-		strcat( stringPtr, $<text>2 );
-		strcat( stringPtr, endScanf );
+		strcpy( string_ptr, begin_scanf );
+		strcat( string_ptr, $<text>2 );
+		strcat( string_ptr, end_scanf );
 		
 		/* Deve-se capturar o tipo da variável para definir o tipo de leitura mais adequada.
 			Proponho utilizar uma struct com dois elementos para definir uma VARIABLE. */
-		printf( "%s", stringPtr );
-		$<text>$ = stringPtr;
+		printf( "%s", string_ptr );
+		$<text>$ = string_ptr;
 	};
 
 %%
