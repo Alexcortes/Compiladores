@@ -9,7 +9,7 @@
 
 DIGIT			[0-9]
 INTEGER		{DIGIT}+
-REAL			{DIGIT}+"."{DIGIT}+
+REAL			-?{INTEGER}("."{INTEGER})?
 
 CHARACTER	[a-zA-Z]
 LITERAL		\"[a-zA-Z0-9][a-zA-Z0-9].*\"
