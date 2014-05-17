@@ -1,24 +1,35 @@
+#ifndef SYMBOLTABLE_H
+#define SYMBOLTABLE_H
+
 #include <string>
-#include <map>
 #include <vector>
 
 #include "Symbol.h"
 
 using namespace std;
 
+/* This class is the symbol table that are part of the lexical and 
+ * syntactic part of the compiler. Through it the specific functions in 
+ * this class are several possible actions, including the insertion and 
+ * search symbols quickly and easily. */
 class SymbolTable
 {
 	private:
-		SymbolTable instanceSymbolTable;
-
+		vector<Symbol> table;
+	
 	public:
-		SymbolTable get_Instance( );
-
+		SymbolTable( );
+		
 		void insert_symbol( Symbol );
 		void delete_symbol( Symbol );
+		void delete_all_symbols( );
+		void list_table_elements( );
+		
+		int size_table( );
 
-		Symbol find_symbol( Symbol );
-
-	private:
-		SymbolTable( );
+		Symbol find_symbol_by_name( string );
+		
+		vector<Symbol> get_table( );
 };
+
+#endif
