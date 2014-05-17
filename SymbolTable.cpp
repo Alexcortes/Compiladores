@@ -22,14 +22,13 @@ void SymbolTable::insert_symbol( const Symbol inserted_symbol )
 
 /* This function provides the action of deleting symbols of the 
  * symbol table. */
-void SymbolTable::delete_symbol( Symbol deleted_symbol )
+void SymbolTable::delete_symbol( string searched_name )
 {	
 	const unsigned int length_table = this->table.size();
 	
 	for( unsigned int i = 0; i < length_table; i++ )
 	{
-		const string tested_name   = table[ i ].get_symbol_name();
-		const string searched_name = deleted_symbol.get_symbol_name();
+		string tested_name   = table[ i ].get_symbol_name();
 		
 		if( tested_name == searched_name )
 		{	

@@ -21,7 +21,7 @@ class SymbolTable
 		SymbolTable( );
 		
 		void insert_symbol( Symbol );
-		void delete_symbol( Symbol );
+		void delete_symbol( string );
 		void delete_all_symbols( );
 		void list_table_elements( );
 		
