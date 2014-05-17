@@ -138,7 +138,7 @@ attribution:
 	VARIABLE ATTRIBUTION value {
 		Symbol variable = table.find_symbol_by_name( $<text>1 );
 		variable.set_symbol_value( $<text>3 );
-		
+
 		table.delete_symbol( $<text>1 );
 		table.insert_symbol( variable );
 		
@@ -153,9 +153,6 @@ attribution:
 		built_string.append( semi_colon );
 
 		cout << built_string;
-
-		cout << endl;
-		table.find_symbol_by_name( $<text>1 ).list_attributes_symbol();
 
 		strcpy( $<text>$, built_string.c_str() );
 	};

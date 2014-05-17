@@ -28,11 +28,11 @@ void SymbolTable::delete_symbol( string searched_name )
 	
 	for( unsigned int i = 0; i < length_table; i++ )
 	{
-		string tested_name   = table[ i ].get_symbol_name();
+		string tested_name = table[ i ].get_symbol_name();
 		
 		if( tested_name == searched_name )
 		{	
-			this->table.erase( table.begin() + ( i - 1 ) );
+			this->table.erase( table.begin() + i );
 			
 		} else
 		{
