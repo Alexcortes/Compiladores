@@ -50,21 +50,6 @@
 
 %%
 
-program:
-	/* Regra Vazia */
-	| program content_program
-	;
-
-content_program:
-	NEWLINE { printf("\n"); }
-	| begin_of_program
-	| end_of_program
-	| declaration
-	| attribution
-	| output
-	| input
-	;
-
 Type:
 	TYPE_INT {
 		char Int[] = "int";
@@ -102,6 +87,21 @@ value:
 	VARIABLE {
 	} | number
 	| text
+	;
+
+program:
+	/* Regra Vazia */
+	| program content_program
+	;
+
+content_program:
+	NEWLINE { printf("\n"); }
+	| begin_of_program
+	| end_of_program
+	| declaration
+	| attribution
+	| output
+	| input
 	;
 
 begin_of_program:

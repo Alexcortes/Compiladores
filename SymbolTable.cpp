@@ -52,7 +52,7 @@ void SymbolTable::delete_all_symbols( )
  * table. */
 Symbol SymbolTable::find_symbol_by_name( const string searched_name )
 {
-	Symbol found_symbol("not valid");
+	Symbol found_symbol("NOT VALID", "NULL", "NOT TYPE");
 	
 	const unsigned int length_table = this->table.size();
 	

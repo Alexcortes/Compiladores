@@ -22,15 +22,23 @@ class Symbol
 		Symbol( string, string );
 		Symbol( string, string, string );
 
-		string get_symbol_name( );
-		string get_symbol_type( );
-		string get_symbol_value( );
+		string get_symbol_name( ) const;
+		string get_symbol_type( ) const;
+		string get_symbol_value( ) const;
 
 		void set_symbol_name( string );
 		void set_symbol_type( string );
 		void set_symbol_value( string );
 		
 		void list_attributes_symbol( );
+
+		bool equals( Symbol ) const;
+		bool equals_name( string ) const;
+		bool equals_type( string ) const;
+		bool equals_value( string ) const;
+
+		private:
+			bool operator== ( const Symbol& ) const;
 };
 
 #endif
