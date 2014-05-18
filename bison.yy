@@ -18,6 +18,32 @@
 	SymbolTable table;
 %}
 
+%{
+	string check_variable_type( string variable_type )
+	{
+		string checked_type = "";
+
+		if( variable_type == "int" )
+		{
+			checked_type = "%d";
+
+		} else if( variable_type == "float" )
+		{
+			checked_type = "%f";
+
+		} else if( variable_type == "char" )
+		{
+			checked_type = "%c";
+
+		} else if( variable_type == "char *" )
+		{
+			checked_type = "%s";
+		}
+
+		return checked_type;
+	}
+%}
+
 %union{
 	int   integer;
 	float real;
@@ -145,6 +171,10 @@ attribution:
 			{
 				cout << "Variável não declarada!" << endl;
 				return UNDECLARED_VARIABLE;
+
+			} else
+			{
+				// Nothing To Do
 			}
 		}
 		
@@ -171,13 +201,55 @@ attribution:
 
 output:
 	 PRINTF text {
+		const string second_token( $<text>2 );
 		const string begin_printf = "printf(";
 		const string end_printf   = ");";
 		
 		string built_string = "";
 		
 		built_string.append( begin_printf );
-		built_string.append( $<text>2 );
+		built_string.append( second_token );
+		built_string.append( end_printf );
+		
+		cout << built_string << endl;
+
+		strcpy( $<text>$, built_string.c_str() );
+
+	} | PRINTF VARIABLE {
+		const string second_token( $<text>2 );
+		
+		for( unsigned int i = 0; i < table.size_table(); i++ )
+		{
+			if( table.exists_symbol( second_token ) )
+			{
+				cout << "Variável não declarada!" << endl;
+				return UNDECLARED_VARIABLE;
+
+			} else
+			{
+				// Nothing To Do
+			}
+		}
+
+		string variable_type = table.find_symbol_by_name( second_token )
+										.get_symbol_type();
+
+		const string reference_type = check_variable_type( variable_type );
+		const string begin_printf = "printf(";
+		const string end_printf   = ");";
+		const string blank = " ";
+		const string comma = ",";
+		const string marks = "\"";
+		
+		string built_string = "";		
+
+		built_string.append( begin_printf );
+		built_string.append( marks );
+		built_string.append( reference_type );
+		built_string.append( marks );
+		built_string.append( comma );
+		built_string.append( blank );
+		built_string.append( second_token );
 		built_string.append( end_printf );
 		
 		cout << built_string << endl;
@@ -187,13 +259,14 @@ output:
 
 input:
 	SCANF VARIABLE {
+		const string second_token( $<text>2 );
 		const string begin_scanf = "scanf(";
 		const string end_scanf   = ");";
 		
 		string built_string = "";
 		
 		built_string.append( begin_scanf );
-		built_string.append( $<text>2 );
+		built_string.append( second_token );
 		built_string.append( end_scanf );
 		
 		/* TODO: Deve-se capturar o tipo da variável para definir o tipo de leitura mais adequada.
