@@ -35,7 +35,7 @@
 		{
 			checked_type = "%c";
 
-		} else if( variable_type == "char *" )
+		} else if( variable_type == "char*" )
 		{
 			checked_type = "%s";
 		}
@@ -90,7 +90,7 @@ Type:
 		$<text>$ = Char;
 
 	} | TYPE_STRING {
-		char String[] = "char *";
+		char String[] = "char*";
 		$<text>$ = String;
 
 	};
@@ -132,6 +132,15 @@ content_program:
 
 begin_of_program:
 	START {
+		Symbol comma( "," );
+		Symbol semi_colon( ";" );
+		Symbol blank( " " );
+		Symbol equal( "=" );
+
+		table.insert_symbol( comma );
+		table.insert_symbol( semi_colon );
+		table.insert_symbol( blank );
+		table.insert_symbol( equal );
 
 		cout << "#include <stdio.h>"  << endl
 			  << "#include <stdlib.h>" << endl
@@ -152,86 +161,107 @@ end_of_program:
 
 declaration:
 	VARIABLE COLON Type {
-		Symbol variable( $<text>1, $<text>3 );
+		const string variable_token( $<text>1 );
+		const string type_token( $<text>3 );
+
+		if( !table.exists_symbol( variable_token ) )
+		{
+			Symbol variable( variable_token, type_token );
 		
-		table.insert_symbol( variable );
+			table.insert_symbol( variable );
+
+			const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
+			const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
 		
-		cout << variable.get_symbol_type() << " "
-			  << variable.get_symbol_name() << ";";
+			cout << variable.get_symbol_type() << blank
+				  << variable.get_symbol_name() << semi_colon;
+
+		} else
+		{
+			cout << "Variável já declarada!" << endl;
+			return VARIABLE_ALREADY_DECLARED;
+		}
 	};
 
 attribution:
 	VARIABLE ATTRIBUTION value {
-		const string first_token( $<text>1 );
-		const string third_token( $<text>3 );
+		const string variable_token( $<text>1 );
+		const string value_token( $<text>3 );
 		
-		for( unsigned int i = 0; i < table.size_table(); i++ )
+		if( table.exists_symbol( variable_token ) )
 		{
-			if( table.exists_symbol( first_token ) )
+			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
+
+			// TODO: Verificação de correspondência entre o tipo da variável e o valor a atribuir-se
+			if( true )
 			{
-				cout << "Variável não declarada!" << endl;
-				return UNDECLARED_VARIABLE;
+				Symbol variable = table.find_symbol_by_name( variable_token );
+				variable.set_symbol_value( value_token );
+
+				table.delete_symbol( variable_token );
+				table.insert_symbol( variable );
+		
+				const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
+				const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
+				const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
+
+				string built_string = "";
+
+				built_string.append( variable_token );
+				built_string.append( blank );
+				built_string.append( equal );
+				built_string.append( blank );
+				built_string.append( value_token );
+				built_string.append( semi_colon );
+
+				cout << built_string;
+
+				strcpy( $<text>$, built_string.c_str() );
 
 			} else
 			{
-				// Nothing To Do
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
 			}
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
 		}
-		
-		Symbol variable = table.find_symbol_by_name( first_token );
-		variable.set_symbol_value( third_token );
-
-		table.delete_symbol( first_token );
-		table.insert_symbol( variable );
-		
-		const string equal = " = ";
-		const string semi_colon = ";";
-
-		string built_string = "";
-
-		built_string.append( first_token );
-		built_string.append( equal );
-		built_string.append( third_token );
-		built_string.append( semi_colon );
-
-		cout << built_string;
-
-		strcpy( $<text>$, built_string.c_str() );
 	};
 
 output:
 	 PRINTF text {
-		const string second_token( $<text>2 );
+		const string text_token( $<text>2 );
 		const string begin_printf = "printf(";
 		const string end_printf   = ");";
 		
 		string built_string = "";
 		
 		built_string.append( begin_printf );
-		built_string.append( second_token );
+		built_string.append( text_token );
 		built_string.append( end_printf );
 		
-		cout << built_string << endl;
+		cout << built_string;
 
 		strcpy( $<text>$, built_string.c_str() );
 
 	} | PRINTF VARIABLE {
-		const string second_token( $<text>2 );
+		const string variable_token( $<text>2 );
 		
-		for( unsigned int i = 0; i < table.size_table(); i++ )
+		if( table.exists_symbol( variable_token ) )
 		{
-			if( table.exists_symbol( second_token ) )
-			{
-				cout << "Variável não declarada!" << endl;
-				return UNDECLARED_VARIABLE;
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
 
-			} else
-			{
-				// Nothing To Do
-			}
+		} else
+		{
+			// Nothing To Do
 		}
 
-		string variable_type = table.find_symbol_by_name( second_token )
+		string variable_type = table.find_symbol_by_name( variable_token )
 										.get_symbol_type();
 
 		const string reference_type = check_variable_type( variable_type );
@@ -249,7 +279,7 @@ output:
 		built_string.append( marks );
 		built_string.append( comma );
 		built_string.append( blank );
-		built_string.append( second_token );
+		built_string.append( variable_token );
 		built_string.append( end_printf );
 		
 		cout << built_string << endl;
@@ -259,14 +289,14 @@ output:
 
 input:
 	SCANF VARIABLE {
-		const string second_token( $<text>2 );
+		const string variable_token( $<text>2 );
 		const string begin_scanf = "scanf(";
 		const string end_scanf   = ");";
 		
 		string built_string = "";
 		
 		built_string.append( begin_scanf );
-		built_string.append( second_token );
+		built_string.append( variable_token );
 		built_string.append( end_scanf );
 		
 		/* TODO: Deve-se capturar o tipo da variável para definir o tipo de leitura mais adequada.

@@ -7,6 +7,8 @@
 #include "Symbol.h"
 
 #define UNDECLARED_VARIABLE -1
+#define VARIABLE_ALREADY_DECLARED -2
+#define IMPOSSIBLE_TO_ASSIGN -3
 
 using namespace std;
 

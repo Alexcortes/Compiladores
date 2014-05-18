@@ -127,7 +127,7 @@ bool SymbolTable::exists_symbol( string tested_name ) const
 {
 	bool exist = false;
 
-	const unsigned int length_table = this->table.size();
+	const unsigned int length_table = this->table.size() - 1;
 	
 	for( unsigned int i = 0; i < length_table; i++ )
 	{
