@@ -36,9 +36,6 @@ class Symbol
 		bool equals_name( string ) const;
 		bool equals_type( string ) const;
 		bool equals_value( string ) const;
-
-		private:
-			bool operator== ( const Symbol& ) const;
 };
 
 #endif

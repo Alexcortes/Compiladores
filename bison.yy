@@ -136,20 +136,32 @@ declaration:
 
 attribution:
 	VARIABLE ATTRIBUTION value {
-		Symbol variable = table.find_symbol_by_name( $<text>1 );
-		variable.set_symbol_value( $<text>3 );
+		const string first_token( $<text>1 );
+		const string third_token( $<text>3 );
+		
+		for( unsigned int i = 0; i < table.size_table(); i++ )
+		{
+			if( table.exists_symbol( first_token ) )
+			{
+				cout << "Variável não declarada!" << endl;
+				return UNDECLARED_VARIABLE;
+			}
+		}
+		
+		Symbol variable = table.find_symbol_by_name( first_token );
+		variable.set_symbol_value( third_token );
 
-		table.delete_symbol( $<text>1 );
+		table.delete_symbol( first_token );
 		table.insert_symbol( variable );
 		
-		string equal = " = ";
-		string semi_colon = ";";
+		const string equal = " = ";
+		const string semi_colon = ";";
 
 		string built_string = "";
 
-		built_string.append( $<text>1 );
+		built_string.append( first_token );
 		built_string.append( equal );
-		built_string.append( $<text>3 );
+		built_string.append( third_token );
 		built_string.append( semi_colon );
 
 		cout << built_string;
@@ -159,8 +171,8 @@ attribution:
 
 output:
 	 PRINTF text {
-		string begin_printf = "printf(";
-		string end_printf   = ");";
+		const string begin_printf = "printf(";
+		const string end_printf   = ");";
 		
 		string built_string = "";
 		
@@ -175,8 +187,8 @@ output:
 
 input:
 	SCANF VARIABLE {
-		string begin_scanf = "scanf(";
-		string end_scanf     = ");";
+		const string begin_scanf = "scanf(";
+		const string end_scanf   = ");";
 		
 		string built_string = "";
 		

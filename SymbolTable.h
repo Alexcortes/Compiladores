@@ -6,6 +6,8 @@
 
 #include "Symbol.h"
 
+#define UNDECLARED_VARIABLE -1
+
 using namespace std;
 
 /* This class is the symbol table that are part of the lexical and 
@@ -24,12 +26,14 @@ class SymbolTable
 		void delete_symbol( string );
 		void delete_all_symbols( );
 		void list_table_elements( );
+
+		vector<Symbol> get_table( );
+		Symbol         find_symbol_by_name( string );
 		
 		int size_table( );
 
-		Symbol find_symbol_by_name( string );
-		
-		vector<Symbol> get_table( );
+		bool exists_symbol( Symbol ) const;
+		bool exists_symbol( string ) const;
 };
 
 #endif
