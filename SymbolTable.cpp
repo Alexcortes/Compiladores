@@ -102,18 +102,18 @@ void SymbolTable::list_table_elements( )
 	cout << endl;
 }
 
-bool SymbolTable::exists_symbol( Symbol tested_symbol ) const
+bool SymbolTable::exist_symbol( Symbol tested_symbol ) const
 {
-	bool exist = false;
+	bool exist;
 
-	const unsigned int length_table = this->table.size();
+	const unsigned int length_table = this->table.size() - 1;
 	const string tested_symbol_name = tested_symbol.get_symbol_name();
 	
-	for( unsigned int i = 0; i < length_table; i++ )
+	for( unsigned int i = 0; i <= length_table; i++ )
 	{
 		if( table[ i ].equals_name( tested_symbol_name ) )
 		{
-			exist = true;
+			return true;
 		} else
 		{
 			exist = false;
@@ -123,17 +123,17 @@ bool SymbolTable::exists_symbol( Symbol tested_symbol ) const
 	return exist;
 }
 
-bool SymbolTable::exists_symbol( string tested_name ) const
+bool SymbolTable::exist_symbol( string tested_name ) const
 {
-	bool exist = false;
+	bool exist;
 
 	const unsigned int length_table = this->table.size() - 1;
 	
-	for( unsigned int i = 0; i < length_table; i++ )
+	for( unsigned int i = 0; i <= length_table; i++ )
 	{
 		if( table[ i ].equals_name( tested_name ) )
 		{
-			exist = true;
+			return true;
 		} else
 		{
 			exist = false;

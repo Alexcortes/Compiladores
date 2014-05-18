@@ -155,7 +155,8 @@ begin_of_program:
 
 end_of_program:
 	END {
-		cout << "}" << endl;
+		cout << "return 0;" << endl
+		     << "}"			  << endl;
 
 	};
 
@@ -164,10 +165,10 @@ declaration:
 		const string variable_token( $<text>1 );
 		const string type_token( $<text>3 );
 
-		if( !table.exists_symbol( variable_token ) )
+		if( !table.exist_symbol( variable_token ) )
 		{
 			Symbol variable( variable_token, type_token );
-		
+
 			table.insert_symbol( variable );
 
 			const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
@@ -188,7 +189,7 @@ attribution:
 		const string variable_token( $<text>1 );
 		const string value_token( $<text>3 );
 		
-		if( table.exists_symbol( variable_token ) )
+		if( table.exist_symbol( variable_token ) )
 		{
 			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
 
@@ -251,40 +252,38 @@ output:
 	} | PRINTF VARIABLE {
 		const string variable_token( $<text>2 );
 		
-		if( table.exists_symbol( variable_token ) )
+		if( table.exist_symbol( variable_token ) )
 		{
-			cout << "Variável não declarada!" << endl;
-			return UNDECLARED_VARIABLE;
+			string variable_type = table.find_symbol_by_name( variable_token )
+											.get_symbol_type();
+
+			const string reference_type = check_variable_type( variable_type );
+			const string begin_printf = "printf(";
+			const string end_printf   = ");";
+			const string blank = " ";
+			const string comma = ",";
+			const string marks = "\"";
+		
+			string built_string = "";		
+
+			built_string.append( begin_printf );
+			built_string.append( marks );
+			built_string.append( reference_type );
+			built_string.append( marks );
+			built_string.append( comma );
+			built_string.append( blank );
+			built_string.append( variable_token );
+			built_string.append( end_printf );
+		
+			cout << built_string << endl;
+
+			strcpy( $<text>$, built_string.c_str() );
 
 		} else
 		{
-			// Nothing To Do
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
 		}
-
-		string variable_type = table.find_symbol_by_name( variable_token )
-										.get_symbol_type();
-
-		const string reference_type = check_variable_type( variable_type );
-		const string begin_printf = "printf(";
-		const string end_printf   = ");";
-		const string blank = " ";
-		const string comma = ",";
-		const string marks = "\"";
-		
-		string built_string = "";		
-
-		built_string.append( begin_printf );
-		built_string.append( marks );
-		built_string.append( reference_type );
-		built_string.append( marks );
-		built_string.append( comma );
-		built_string.append( blank );
-		built_string.append( variable_token );
-		built_string.append( end_printf );
-		
-		cout << built_string << endl;
-
-		strcpy( $<text>$, built_string.c_str() );
 	};
 
 input:

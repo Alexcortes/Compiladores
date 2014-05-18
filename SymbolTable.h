@@ -34,8 +34,8 @@ class SymbolTable
 		
 		int size_table( );
 
-		bool exists_symbol( Symbol ) const;
-		bool exists_symbol( string ) const;
+		bool exist_symbol( Symbol ) const;
+		bool exist_symbol( string ) const;
 };
 
 #endif
