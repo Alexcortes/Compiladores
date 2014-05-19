@@ -34,6 +34,10 @@ BOOLEAN		{TRUE}|{FALSE}
 "escreva"	return(PRINTF);
 "leia"		return(SCANF);
 
+(?# Identificadores matemáticos )
+"+" return(PLUS);
+"=" return(EQUAL);
+
 (?# Pontuação permitida )
 ":" return(COLON);
 ":=" return(ATTRIBUTION);

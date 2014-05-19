@@ -15,10 +15,13 @@
 	int yylex(void);
 	void yyerror(const char *);
 
-	SymbolTable table;
+	SymbolTable table;	// Declaration of the symbol table used throughout the program.
 %}
 
 %{
+	/* This function is used to check the type of the variable captured for, thus, correctly 
+		reference the variable in the action to print the variable value on the screen or 
+		in your reading. */
 	string check_variable_type( string variable_type )
 	{
 		string checked_type = "";
@@ -72,10 +75,13 @@
 %token START
 %token END
 
+%token PLUS
+%token EQUAL
+
 %start program
 
 %%
-
+/* Rule to capture the type of variables. */
 Type:
 	TYPE_INT {
 		char Int[] = "int";
@@ -95,6 +101,7 @@ Type:
 
 	};
 
+/* Rule to capture the numeric value written. */
 number:
 	INT {
 		$<text>$ = $<text>1;
@@ -104,22 +111,28 @@ number:
 
 	};
 
+/* Rule to capture lines of text (strings). */
 text:
 	STRING {
 		$<text>$ = $<text>1;
 	};
 
+/* Rule to reference numerical values ​​and text in a single rule called. The motivation 
+	comes from an effort to simplify the creation of rules involving the values ​​
+	of a variable. */
 value:
 	VARIABLE {
 	} | number
 	| text
 	;
 
+/* Rule that starts the program. */
 program:
 	/* Regra Vazia */
 	| program content_program
 	;
 
+/* Rule that defines what can be the content of a program. */
 content_program:
 	NEWLINE { printf("\n"); }
 	| begin_of_program
@@ -128,19 +141,31 @@ content_program:
 	| attribution
 	| output
 	| input
+	| math_expression
 	;
 
+/* Rule that starts the program. There are two essential things are set to the proper 
+	functioning of the compiler and program to be generated: the symbols begins compiler) 
+	and the inclusion of libraries and definition of the main function. */
 begin_of_program:
 	START {
 		Symbol comma( "," );
 		Symbol semi_colon( ";" );
 		Symbol blank( " " );
 		Symbol equal( "=" );
+		Symbol open_parenthesis( "(" );
+		Symbol close_parenthesis( ")" );
+		Symbol printf( "printf" );
+		Symbol scanf( "scanf" );
 
 		table.insert_symbol( comma );
 		table.insert_symbol( semi_colon );
 		table.insert_symbol( blank );
 		table.insert_symbol( equal );
+		table.insert_symbol( open_parenthesis );
+		table.insert_symbol( close_parenthesis );
+		table.insert_symbol( printf );
+		table.insert_symbol( scanf );
 
 		cout << "#include <stdio.h>"  << endl
 			  << "#include <stdlib.h>" << endl
@@ -153,6 +178,7 @@ begin_of_program:
 
 	};
 
+/* Rule to terminate the program. */
 end_of_program:
 	END {
 		cout << "return 0;" << endl
@@ -160,6 +186,7 @@ end_of_program:
 
 	};
 
+/* Rule that defines how a variable must be declared. */
 declaration:
 	VARIABLE COLON Type {
 		const string variable_token( $<text>1 );
@@ -184,6 +211,7 @@ declaration:
 		}
 	};
 
+/* Rule that defines how you must assign values ​​to variables. */
 attribution:
 	VARIABLE ATTRIBUTION value {
 		const string variable_token( $<text>1 );
@@ -193,7 +221,8 @@ attribution:
 		{
 			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
 
-			// TODO: Verificação de correspondência entre o tipo da variável e o valor a atribuir-se
+			/* TODO: Verification of correspondence between the type of the variable and 
+						the value to be attributed. */
 			if( true )
 			{
 				Symbol variable = table.find_symbol_by_name( variable_token );
@@ -233,17 +262,23 @@ attribution:
 		}
 	};
 
+/* Rule that defines how to print on screen texts, variable values​​, or both. */
 output:
 	 PRINTF text {
 		const string text_token( $<text>2 );
-		const string begin_printf = "printf(";
-		const string end_printf   = ");";
+
+		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
+		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
+		const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
+		const string printf            = table.find_symbol_by_name( "printf" ).get_symbol_name();
 		
 		string built_string = "";
 		
-		built_string.append( begin_printf );
+		built_string.append( printf );
+		built_string.append( open_parenthesis );
 		built_string.append( text_token );
-		built_string.append( end_printf );
+		built_string.append( close_parenthesis );
+		built_string.append( semi_colon );
 		
 		cout << built_string;
 
@@ -254,28 +289,32 @@ output:
 		
 		if( table.exist_symbol( variable_token ) )
 		{
-			string variable_type = table.find_symbol_by_name( variable_token )
-											.get_symbol_type();
+			const string variable_type = table.find_symbol_by_name( variable_token )
+													.get_symbol_type();
 
-			const string reference_type = check_variable_type( variable_type );
-			const string begin_printf = "printf(";
-			const string end_printf   = ");";
-			const string blank = " ";
-			const string comma = ",";
+			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
+			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
+			const string reference_type    = check_variable_type( variable_type );
+			const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
+			const string printf            = table.find_symbol_by_name( "printf" ).get_symbol_name();
+			const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
 			const string marks = "\"";
-		
-			string built_string = "";		
 
-			built_string.append( begin_printf );
+			string built_string = "";
+
+			built_string.append( printf );
+			built_string.append( open_parenthesis );
 			built_string.append( marks );
 			built_string.append( reference_type );
 			built_string.append( marks );
 			built_string.append( comma );
 			built_string.append( blank );
 			built_string.append( variable_token );
-			built_string.append( end_printf );
+			built_string.append( close_parenthesis );
+			built_string.append( semi_colon );
 		
-			cout << built_string << endl;
+			cout << built_string;
 
 			strcpy( $<text>$, built_string.c_str() );
 
@@ -286,23 +325,62 @@ output:
 		}
 	};
 
+/* Rule to define how a value is to be read and assigned to a variable. */
 input:
 	SCANF VARIABLE {
 		const string variable_token( $<text>2 );
-		const string begin_scanf = "scanf(";
-		const string end_scanf   = ");";
-		
-		string built_string = "";
-		
-		built_string.append( begin_scanf );
-		built_string.append( variable_token );
-		built_string.append( end_scanf );
-		
-		/* TODO: Deve-se capturar o tipo da variável para definir o tipo de leitura mais adequada.
-				   Proponho utilizar uma struct com dois elementos para definir uma VARIABLE. */
-		cout << built_string << endl;
 
-		strcpy( $<text>$, built_string.c_str() );
+		if( table.exist_symbol( variable_token ) )
+		{
+			const string variable_type = table.find_symbol_by_name( variable_token )
+													.get_symbol_type();
+
+			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
+			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
+			const string reference_type    = check_variable_type( variable_type );
+			const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
+			const string scanf             = table.find_symbol_by_name( "scanf" ).get_symbol_name();
+			const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
+			const string marks		= "\"";
+		
+			string built_string = "";
+
+			built_string.append( scanf );
+			built_string.append( open_parenthesis );
+			built_string.append( marks );
+			built_string.append( reference_type );
+			built_string.append( marks );
+			built_string.append( comma );
+			built_string.append( blank );
+			built_string.append( variable_token );
+			built_string.append( close_parenthesis );
+			built_string.append( semi_colon );
+
+			cout << built_string;
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
+	};
+
+/* Rule that defines possible to build mathematical expressions. */
+math_expression:
+	number {
+		const string number_token( $<text>1 );
+		$<text>$ = number_token;
+
+	} | VARIABLE {
+		const string variable_token( $<text>1 );
+		$<text>$ = variable_token;
+
+	}| math_expression PLUS math_expression {
+		const string first_math_expression_token( $<text>1 );
+		const string second_math_expression_token( $<text>2 );
 	};
 
 %%
