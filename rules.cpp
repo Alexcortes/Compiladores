@@ -14,8 +14,53 @@
 
 using namespace std;
 
-void start_program( )
+void initialize_symbol_table( SymbolTable &table )
 {
+	Symbol comma( "," );
+	Symbol semi_colon( ";" );
+	Symbol blank( " " );
+
+	Symbol equal( "=" );
+   Symbol plus( "+" );
+	Symbol minus( "-" );
+	Symbol divide( "/" );
+	Symbol times( "*" );
+	Symbol smaller( "<" );
+	Symbol bigger( ">" );
+	Symbol hashtag( "#" );
+
+	Symbol open_parenthesis( "(" );
+	Symbol close_parenthesis( ")" );
+
+	Symbol printf( "printf" );
+	Symbol scanf( "scanf" );
+	Symbol include( "include" );
+
+	table.insert_symbol( comma );
+	table.insert_symbol( semi_colon );
+	table.insert_symbol( blank );
+
+	table.insert_symbol( equal );
+   table.insert_symbol( plus ); 
+	table.insert_symbol( minus );
+	table.insert_symbol( divide );
+	table.insert_symbol( times );
+	table.insert_symbol( smaller );
+	table.insert_symbol( bigger );
+	table.insert_symbol( hashtag );
+
+	table.insert_symbol( open_parenthesis );
+	table.insert_symbol( close_parenthesis );
+
+	table.insert_symbol( printf );
+	table.insert_symbol( scanf );
+	table.insert_symbol( include );
+}
+
+void start_program( SymbolTable &table )
+{
+	initialize_symbol_table( table );
+
 	cout << "#include <stdio.h>"  << endl
         << "#include <stdlib.h>" << endl
         << "#include <string.h>" << endl

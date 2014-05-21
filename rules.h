@@ -8,7 +8,9 @@
 
 using namespace std;
 
-void start_program( );
+void initialize_symbol_table( SymbolTable& );
+
+void start_program( SymbolTable& );
 void end_program( );
 
 void declare_variable( const string, const string, SymbolTable& );
