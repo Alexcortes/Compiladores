@@ -20,6 +20,37 @@
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
 %}
 
+%{
+	void initialize_symbol_table()
+	{
+		Symbol comma( "," );
+		Symbol semi_colon( ";" );
+		Symbol blank( " " );
+		Symbol equal( "=" );
+	   Symbol plus( "+" );
+		Symbol minus( "-" );
+		Symbol divide( "/" );
+		Symbol times( "*" );
+		Symbol open_parenthesis( "(" );
+		Symbol close_parenthesis( ")" );
+		Symbol printf( "printf" );
+		Symbol scanf( "scanf" );
+
+		table.insert_symbol( comma );
+		table.insert_symbol( semi_colon );
+		table.insert_symbol( blank );
+		table.insert_symbol( equal );
+	   table.insert_symbol( plus ); 
+		table.insert_symbol( minus );
+		table.insert_symbol( divide );
+		table.insert_symbol( times );
+		table.insert_symbol( open_parenthesis );
+		table.insert_symbol( close_parenthesis );
+		table.insert_symbol( printf );
+		table.insert_symbol( scanf );
+	}
+%}
+
 %union{
 	int   integer;
 	float real;
@@ -145,31 +176,7 @@ content_program:
 	and the inclusion of libraries and definition of the main function. */
 begin_of_program:
 	START {
-		Symbol comma( "," );
-		Symbol semi_colon( ";" );
-		Symbol blank( " " );
-		Symbol equal( "=" );
-	   Symbol plus( "+" );
-		Symbol minus( "-" );
-		Symbol divide( "/" );
-		Symbol times( "*" );
-		Symbol open_parenthesis( "(" );
-		Symbol close_parenthesis( ")" );
-		Symbol printf( "printf" );
-		Symbol scanf( "scanf" );
-
-		table.insert_symbol( comma );
-		table.insert_symbol( semi_colon );
-		table.insert_symbol( blank );
-		table.insert_symbol( equal );
-	   table.insert_symbol( plus ); 
-		table.insert_symbol( minus );
-		table.insert_symbol( divide );
-		table.insert_symbol( times );
-		table.insert_symbol( open_parenthesis );
-		table.insert_symbol( close_parenthesis );
-		table.insert_symbol( printf );
-		table.insert_symbol( scanf );
+		initialize_symbol_table();
 
 		cout << "#include <stdio.h>"  << endl
 			  << "#include <stdlib.h>" << endl
@@ -224,10 +231,11 @@ attribution:
 		if( table.exist_symbol( variable_token ) )
 		{
 			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
+			const string value_type = check_value_type( value_token );
 
-			/* TODO: Verification of correspondence between the type of the variable and 
-						the value to be attributed. */
-			if( true )
+			/* The function string::compare() return zero if the strings are equal. So, to pass in test
+				it is necessary transform zero (false) in one (true). */
+			if( !type.compare( value_type ) )
 			{
 				Symbol variable = table.find_symbol_by_name( variable_token );
 				variable.set_symbol_value( value_token );
@@ -428,7 +436,7 @@ math_expression:
 	} | VARIABLE {
 		$<text>$ = $<text>1;
 
-	}| math_expression operator math_expression {
+	} | math_expression operator math_expression {
 		const string first_math_expression_token( $<text>1 );
 		const string second_math_expression_token( $<text>3 );
      	const string operator_token( $<text>2 ); 
