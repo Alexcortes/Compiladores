@@ -8,6 +8,7 @@
 	#include <string>
 	#include <vector>
 
+	#include "rules.h"
 	#include "checks.h"
 	#include "Symbol.h"
 	#include "SymbolTable.h"
@@ -191,24 +192,13 @@ content_program:
 begin_of_program:
 	START {
 		initialize_symbol_table();
-
-		cout << "#include <stdio.h>"  << endl
-			  << "#include <stdlib.h>" << endl
-			  << "#include <string.h>" << endl
-			  << "#include <math.h>"   << endl
-			  << endl;
-
-		cout << "int main(int argc, char *argv[])" << endl
-			  << "{";
-
+		start_program();
 	};
 
 /* Rule to terminate the program. */
 end_of_program:
 	END {
-		cout << "return 0;" << endl
-		     << "}"			  << endl;
-
+		end_program();
 	};
 
 /* Rule that defines how a variable must be declared. */
@@ -219,16 +209,7 @@ declaration:
 
 		if( !table.exist_symbol( variable_token ) )
 		{
-			Symbol variable( variable_token, type_token );
-
-			table.insert_symbol( variable );
-
-			const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
-			const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
-		
-			cout << variable.get_symbol_type() << blank
-				  << variable.get_symbol_name() << semi_colon;
-
+			declare_variable( variable_token, type_token, table);
 		} else
 		{
 			cout << "Variável já declarada!" << endl;
@@ -340,20 +321,8 @@ attribution:
 output:
 	 PRINTF text {
 		const string text_token( $<text>2 );
-
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
-		const string printf            = table.find_symbol_by_name( "printf" ).get_symbol_name();
 		
-		string built_string = "";
-		
-		built_string.append( printf );
-		built_string.append( open_parenthesis );
-		built_string.append( text_token );
-		built_string.append( close_parenthesis );
-		built_string.append( semi_colon );
-		
+		string built_string = print_text( text_token, table );
 		cout << built_string;
 
 		strcpy( $<text>$, built_string.c_str() );
@@ -363,31 +332,7 @@ output:
 		
 		if( table.exist_symbol( variable_token ) )
 		{
-			const string variable_type = table.find_symbol_by_name( variable_token )
-													.get_symbol_type();
-
-			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-			const string reference_type    = check_variable_type( variable_type );
-			const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
-			const string printf            = table.find_symbol_by_name( "printf" ).get_symbol_name();
-			const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-			const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
-			const string marks = "\"";
-
-			string built_string = "";
-
-			built_string.append( printf );
-			built_string.append( open_parenthesis );
-			built_string.append( marks );
-			built_string.append( reference_type );
-			built_string.append( marks );
-			built_string.append( comma );
-			built_string.append( blank );
-			built_string.append( variable_token );
-			built_string.append( close_parenthesis );
-			built_string.append( semi_colon );
-		
+			string built_string = print_variable( variable_token, table );
 			cout << built_string;
 
 			strcpy( $<text>$, built_string.c_str() );
@@ -406,31 +351,7 @@ input:
 
 		if( table.exist_symbol( variable_token ) )
 		{
-			const string variable_type = table.find_symbol_by_name( variable_token )
-													.get_symbol_type();
-
-			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-			const string reference_type    = check_variable_type( variable_type );
-			const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
-			const string scanf             = table.find_symbol_by_name( "scanf" ).get_symbol_name();
-			const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-			const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
-			const string marks		= "\"";
-		
-			string built_string = "";
-
-			built_string.append( scanf );
-			built_string.append( open_parenthesis );
-			built_string.append( marks );
-			built_string.append( reference_type );
-			built_string.append( marks );
-			built_string.append( comma );
-			built_string.append( blank );
-			built_string.append( variable_token );
-			built_string.append( close_parenthesis );
-			built_string.append( semi_colon );
-
+			string built_string = scan_variable( variable_token, table );
 			cout << built_string;
 
 			strcpy( $<text>$, built_string.c_str() );
