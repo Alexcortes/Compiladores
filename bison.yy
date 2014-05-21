@@ -2,11 +2,13 @@
 	#include <cstdio>
 	#include <cstdlib>
 	#include <cstring>
+	#include <cctype>
 
 	#include <iostream>
 	#include <string>
 	#include <vector>
 
+	#include "checks.h"
 	#include "Symbol.h"
 	#include "SymbolTable.h"
 
@@ -16,35 +18,6 @@
 	void yyerror(const char *);
 
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
-%}
-
-%{
-	/* This function is used to check the type of the variable captured for, thus, correctly 
-		reference the variable in the action to print the variable value on the screen or 
-		in your reading. */
-	string check_variable_type( string variable_type )
-	{
-		string checked_type = "";
-
-		if( variable_type == "int" )
-		{
-			checked_type = "%d";
-
-		} else if( variable_type == "float" )
-		{
-			checked_type = "%f";
-
-		} else if( variable_type == "char" )
-		{
-			checked_type = "%c";
-
-		} else if( variable_type == "char*" )
-		{
-			checked_type = "%s";
-		}
-
-		return checked_type;
-	}
 %}
 
 %union{
@@ -76,6 +49,9 @@
 %token END
 
 %token PLUS
+%token MINUS
+%token DIVIDE
+%token TIMES
 %token EQUAL
 
 %start program
@@ -98,6 +74,26 @@ Type:
 	} | TYPE_STRING {
 		char String[] = "char*";
 		$<text>$ = String;
+
+	};
+
+/* Rule to capture the operator in the math expression*/
+operator:
+	PLUS {
+		char Plus[] = "+";
+		$<text>$ = Plus;
+
+	} | MINUS {
+		char Minus[] = "-";
+		$<text>$ = Minus;
+
+	} | DIVIDE {
+		char Divide[] = "/";
+		$<text>$ = Divide;
+
+	} | TIMES {
+		char Times[] = "*";
+		$<text>$ = Times;
 
 	};
 
@@ -128,7 +124,7 @@ value:
 
 /* Rule that starts the program. */
 program:
-	/* Regra Vazia */
+	/* Empty rule*/
 	| program content_program
 	;
 
@@ -153,6 +149,10 @@ begin_of_program:
 		Symbol semi_colon( ";" );
 		Symbol blank( " " );
 		Symbol equal( "=" );
+	   Symbol plus( "+" );
+		Symbol minus( "-" );
+		Symbol divide( "/" );
+		Symbol times( "*" );
 		Symbol open_parenthesis( "(" );
 		Symbol close_parenthesis( ")" );
 		Symbol printf( "printf" );
@@ -162,6 +162,10 @@ begin_of_program:
 		table.insert_symbol( semi_colon );
 		table.insert_symbol( blank );
 		table.insert_symbol( equal );
+	   table.insert_symbol( plus ); 
+		table.insert_symbol( minus );
+		table.insert_symbol( divide );
+		table.insert_symbol( times );
 		table.insert_symbol( open_parenthesis );
 		table.insert_symbol( close_parenthesis );
 		table.insert_symbol( printf );
@@ -242,6 +246,54 @@ attribution:
 				built_string.append( equal );
 				built_string.append( blank );
 				built_string.append( value_token );
+				built_string.append( semi_colon );
+
+				cout << built_string;
+
+				strcpy( $<text>$, built_string.c_str() );
+
+			} else
+			{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+			}
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
+	} |VARIABLE ATTRIBUTION math_expression {
+		
+		const string variable_token( $<text>1 );
+		const string math_expression_token( $<text>3 );
+		
+		if( table.exist_symbol( variable_token ) )
+		{
+			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
+
+			/* TODO: Verification of correspondence between the type of the variable and 
+						the value to be attributed. */
+			if( true )
+			{
+				Symbol variable = table.find_symbol_by_name( variable_token );
+				variable.set_symbol_value( math_expression_token );
+
+				table.delete_symbol( variable_token );
+				table.insert_symbol( variable );
+		
+				const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
+				const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
+				const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
+
+				string built_string = "";
+
+				built_string.append( variable_token );
+				built_string.append( blank );
+				built_string.append( equal );
+				built_string.append( blank );
+				built_string.append( math_expression_token );
 				built_string.append( semi_colon );
 
 				cout << built_string;
@@ -371,16 +423,32 @@ input:
 /* Rule that defines possible to build mathematical expressions. */
 math_expression:
 	number {
-		const string number_token( $<text>1 );
-		$<text>$ = number_token;
+		$<text>$ = $<text>1;
 
 	} | VARIABLE {
-		const string variable_token( $<text>1 );
-		$<text>$ = variable_token;
+		$<text>$ = $<text>1;
 
-	}| math_expression PLUS math_expression {
+	}| math_expression operator math_expression {
 		const string first_math_expression_token( $<text>1 );
-		const string second_math_expression_token( $<text>2 );
+		const string second_math_expression_token( $<text>3 );
+     	const string operator_token( $<text>2 ); 
+
+      const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
+		const string blank = table.find_symbol_by_name( " " ).get_symbol_name();
+      
+      string built_string = "";
+
+      built_string.append( first_math_expression_token );
+     	built_string.append( blank );
+		built_string.append( operator_token );
+		built_string.append( blank );
+      built_string.append( second_math_expression_token );
+      built_string.append( semi_colon );
+      built_string.append( blank );
+
+      cout << built_string;  
+      
+      strcpy( $<text>$, built_string.c_str() );  
 	};
 
 %%
