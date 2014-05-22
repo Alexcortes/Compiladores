@@ -60,14 +60,9 @@ BOOLEAN		{TRUE}|{FALSE}
 	return STRING;
 }
 
-{INTEGER} {
-	yylval.text = strdup(yytext);
-	return INT;
-}
-
 {REAL} {
 	yylval.text = strdup(yytext);
-	return FLOAT;
+	return NUMBER;
 }
 
 %%

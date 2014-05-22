@@ -31,8 +31,7 @@
 %token<text> VARIABLE
 
 %token<text> STRING
-%token<text> INT
-%token<text> FLOAT
+%token<text> NUMBER
 
 %token TYPE_STRING
 %token TYPE_INT
@@ -78,32 +77,21 @@ Type:
 
 	};
 
-/* Rule to capture the operator in the math expression*/
-operator:
-	PLUS {
-		char Plus[] = "+";
-		$<text>$ = Plus;
+math_expression:
+	math_expression PLUS math_expression {
+		const string first_parcel_token( $<text>1 );
+		const string second_parcel_token( $<text>3 );
 
-	} | MINUS {
-		char Minus[] = "-";
-		$<text>$ = Minus;
+		char sum[ 100 ];
+		int first_parcel = atoi( first_parcel_token.c_str() );
+		int second_parcel = atoi( second_parcel_token.c_str() );
+		int sum_parcels = first_parcel + second_parcel;
 
-	} | DIVIDE {
-		char Divide[] = "/";
-		$<text>$ = Divide;
+		sprintf(sum, "%d + %dR%d", first_parcel, second_parcel, sum_parcels );
 
-	} | TIMES {
-		char Times[] = "*";
-		$<text>$ = Times;
+		strcpy( $<text>$, sum );
 
-	};
-
-/* Rule to capture the numeric value written. */
-number:
-	INT {
-		$<text>$ = $<text>1;
-
-	} | FLOAT {
+	} | NUMBER {
 		$<text>$ = $<text>1;
 
 	};
@@ -119,8 +107,10 @@ text:
 	of a variable. */
 value:
 	VARIABLE {
-	} | number
-	| text
+		$<text>$ = $<text>1;
+
+	} | text
+	| math_expression
 	;
 
 /* Rule that starts the program. */
@@ -138,7 +128,6 @@ content_program:
 	| attribution
 	| output
 	| input
-	| math_expression
 	;
 
 /* Rule that starts the program. There are two essential things are set to the proper 
@@ -176,7 +165,7 @@ attribution:
 	VARIABLE ATTRIBUTION value {
 		const string variable_token( $<text>1 );
 		const string value_token( $<text>3 );
-		
+
 		if( table.exist_symbol( variable_token ) )
 		{
 			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
@@ -186,12 +175,35 @@ attribution:
 				it is necessary transform zero (false) in one (true). */
 			if( !type.compare( value_type ) )
 			{
+				if( value_type == "float" || value_type == "int" )
+				{
+					if( check_exist_R( value_token ) )
+					{
+						unsigned int result_position = value_token.find( "R" ) + 1;
+						string result = value_token.substr( result_position );
+
+						Symbol variable = table.find_symbol_by_name( variable_token );
+						variable.set_symbol_value( result );
+
+						table.delete_symbol( variable_token );
+						table.insert_symbol( variable );
+
+					} else
+					{
+						// Nothing To Do
+					}
+
+				} else
+				{
+					// Nothing To Do
+				}
+
 				Symbol variable = table.find_symbol_by_name( variable_token );
 				variable.set_symbol_value( value_token );
 
 				table.delete_symbol( variable_token );
 				table.insert_symbol( variable );
-		
+
 				const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
 				const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
 				const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
@@ -203,54 +215,6 @@ attribution:
 				built_string.append( equal );
 				built_string.append( blank );
 				built_string.append( value_token );
-				built_string.append( semi_colon );
-
-				cout << built_string;
-
-				strcpy( $<text>$, built_string.c_str() );
-
-			} else
-			{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
-			}
-
-		} else
-		{
-			cout << "Variável não declarada!" << endl;
-			return UNDECLARED_VARIABLE;
-		}
-	} |VARIABLE ATTRIBUTION math_expression {
-		
-		const string variable_token( $<text>1 );
-		const string math_expression_token( $<text>3 );
-		
-		if( table.exist_symbol( variable_token ) )
-		{
-			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
-
-			/* TODO: Verification of correspondence between the type of the variable and 
-						the value to be attributed. */
-			if( true )
-			{
-				Symbol variable = table.find_symbol_by_name( variable_token );
-				variable.set_symbol_value( math_expression_token );
-
-				table.delete_symbol( variable_token );
-				table.insert_symbol( variable );
-		
-				const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
-				const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
-				const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
-
-				string built_string = "";
-
-				built_string.append( variable_token );
-				built_string.append( blank );
-				built_string.append( equal );
-				built_string.append( blank );
-				built_string.append( math_expression_token );
 				built_string.append( semi_colon );
 
 				cout << built_string;
@@ -316,38 +280,6 @@ input:
 			return UNDECLARED_VARIABLE;
 		}
 	};
-
-/* Rule that defines possible to build mathematical expressions. */
-math_expression:
-	number {
-		$<text>$ = $<text>1;
-
-	} | VARIABLE {
-		$<text>$ = $<text>1;
-
-	} | math_expression operator math_expression {
-		const string first_math_expression_token( $<text>1 );
-		const string second_math_expression_token( $<text>3 );
-     	const string operator_token( $<text>2 ); 
-
-      const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
-		const string blank = table.find_symbol_by_name( " " ).get_symbol_name();
-      
-      string built_string = "";
-
-      built_string.append( first_math_expression_token );
-     	built_string.append( blank );
-		built_string.append( operator_token );
-		built_string.append( blank );
-      built_string.append( second_math_expression_token );
-      built_string.append( semi_colon );
-      built_string.append( blank );
-
-      cout << built_string;  
-      
-      strcpy( $<text>$, built_string.c_str() );  
-	};
-
 %%
 
 int main(void) {

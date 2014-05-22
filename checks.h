@@ -12,5 +12,6 @@ bool check_is_string( const string );
 bool check_is_char( const string );
 bool check_exist_punctual( const string );
 bool check_exist_digit( const string );
+bool check_exist_R( const string );
 
 #endif
