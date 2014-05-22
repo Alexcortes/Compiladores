@@ -164,7 +164,7 @@ declaration:
 attribution:
 	VARIABLE ATTRIBUTION value {
 		const string variable_token( $<text>1 );
-		const string value_token( $<text>3 );
+				string value_token( $<text>3 );
 
 		if( table.exist_symbol( variable_token ) )
 		{
@@ -203,6 +203,9 @@ attribution:
 
 				table.delete_symbol( variable_token );
 				table.insert_symbol( variable );
+
+				int r_position = value_token.find( "R" );
+				value_token.resize( r_position );
 
 				const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
 				const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
