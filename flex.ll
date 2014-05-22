@@ -50,6 +50,11 @@ BOOLEAN		{TRUE}|{FALSE}
 "inicio" return(START);
 "final" return(END);
 
+{REAL} {
+	yylval.text = strdup(yytext);
+	return NUMBER;
+}
+
 {IDENTIFIER} { 
 	yylval.text = strdup(yytext);
 	return VARIABLE;
@@ -58,11 +63,6 @@ BOOLEAN		{TRUE}|{FALSE}
 {LITERAL} {
 	yylval.text = strdup(yytext);
 	return STRING;
-}
-
-{REAL} {
-	yylval.text = strdup(yytext);
-	return NUMBER;
 }
 
 %%

@@ -106,12 +106,12 @@ text:
 	comes from an effort to simplify the creation of rules involving the values ​​
 	of a variable. */
 value:
-	VARIABLE {
+	math_expression
+	| text
+	| VARIABLE {
 		$<text>$ = $<text>1;
 
-	} | text
-	| math_expression
-	;
+	};
 
 /* Rule that starts the program. */
 program:
