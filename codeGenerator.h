@@ -20,6 +20,9 @@ string print_text( const string, SymbolTable& );
 string print_variable( const string, SymbolTable& );
 string scan_variable( const string, SymbolTable& );
 
-void calculate_expression( string, string );
+void calculate_plus_expression( string, string );
+void calculate_minus_expression( string, string );
+void calculate_times_expression( string, string );
+void calculate_divide_expression( string, string );
 
 #endif

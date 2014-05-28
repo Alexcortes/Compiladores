@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "rules.h"
+#include "codeGenerator.h"
 #include "checks.h"
 #include "Symbol.h"
 #include "SymbolTable.h"
