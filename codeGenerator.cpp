@@ -202,7 +202,7 @@ string scan_variable( const string variable_token, SymbolTable &table )
 	const string scanf             = table.find_symbol_by_name( "scanf" ).get_symbol_name();
 	const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
 	const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
-	const string marks		= "\"";
+	const string marks = "\"";
 		
 	string built_string = "";
 
@@ -218,5 +218,44 @@ string scan_variable( const string variable_token, SymbolTable &table )
 	built_string.append( semi_colon );
 
 	return built_string;
+}
+
+string calculate_plus_expression( string first_parcel_token, string second_parcel_token )
+{
+	char sum[ 250 ];
+
+	if( check_exist_punctual( second_parcel_token ) )
+	{
+		// TODO: Cálculo de soma quando encontrar um ponto
+	} else
+	{
+		int first_parcel = atoi( first_parcel_token.c_str() );
+		int sum_parcels = 0;
+
+		if( check_exist_R( second_parcel_token ) )
+		{
+			int r_position = second_parcel_token.find_last_of( "R" );
+			int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
+
+			string second_parcel = second_parcel_token.substr( 0, r_position );
+			string result_string = second_parcel_token.substr( after_r_position );
+
+			int previous_sum = atoi( result_string.c_str() );
+			
+			sum_parcels = first_parcel + previous_sum;
+			
+			sprintf(sum, "%d + %sR%d", first_parcel, second_parcel.c_str(), sum_parcels );
+		} else
+		{
+			int second_parcel = atoi( second_parcel_token.c_str() );
+			sum_parcels = first_parcel + second_parcel;
+
+			sprintf(sum, "%d + %dR%d", first_parcel, second_parcel, sum_parcels );
+		}
+	}
+
+	string result_sum( sum );
+
+	return result_sum;
 }
 
