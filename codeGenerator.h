@@ -14,7 +14,7 @@ void start_program( SymbolTable& );
 void end_program( );
 
 void declare_variable( const string, const string, SymbolTable& );
-void attribute_variable( string, string );
+string attribute_variable( string, string, SymbolTable& );
 
 string print_text( const string, SymbolTable& );
 string print_variable( const string, SymbolTable& );

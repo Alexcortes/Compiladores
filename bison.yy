@@ -8,7 +8,7 @@
 	#include <string>
 	#include <vector>
 
-	#include "rules.h"
+	#include "codeGenerator.h"
 	#include "checks.h"
 	#include "Symbol.h"
 	#include "SymbolTable.h"
@@ -22,8 +22,6 @@
 %}
 
 %union{
-	int   integer;
-	float real;
 	char *text;
 }
 
@@ -195,51 +193,7 @@ attribution:
 				it is necessary transform zero (false) in one (true). */
 			if( !type.compare( value_type ) )
 			{
-				if( value_type == "float" || value_type == "int" )
-				{
-					if( check_exist_R( value_token ) )
-					{
-						unsigned int result_position = value_token.find( "R" ) + 1;
-						string result = value_token.substr( result_position );
-
-						Symbol variable = table.find_symbol_by_name( variable_token );
-						variable.set_symbol_value( result );
-
-						table.delete_symbol( variable_token );
-						table.insert_symbol( variable );
-
-					} else
-					{
-						// Nothing To Do
-					}
-
-				} else
-				{
-					// Nothing To Do
-				}
-
-				Symbol variable = table.find_symbol_by_name( variable_token );
-				variable.set_symbol_value( value_token );
-
-				table.delete_symbol( variable_token );
-				table.insert_symbol( variable );
-
-				int r_position = value_token.find( "R" );
-				value_token.resize( r_position );
-
-				const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
-				const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
-				const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
-
-				string built_string = "";
-
-				built_string.append( variable_token );
-				built_string.append( blank );
-				built_string.append( equal );
-				built_string.append( blank );
-				built_string.append( value_token );
-				built_string.append( semi_colon );
-
+				string built_string = attribute_variable( variable_token, value_token, table );
 				cout << built_string;
 
 				strcpy( $<text>$, built_string.c_str() );

@@ -90,6 +90,58 @@ void declare_variable( const string variable_token, const string type_token, Sym
         << variable.get_symbol_name() << semi_colon;
 }
 
+string attribute_variable( string variable_token, string value_token, SymbolTable& table )
+{
+	const string value_type = check_value_type( value_token );
+
+	if( value_type == "float" || value_type == "int" )
+	{
+		if( check_exist_R( value_token ) )
+		{
+			unsigned int result_position = value_token.find( "R" ) + 1;
+			string result = value_token.substr( result_position );
+
+			Symbol variable = table.find_symbol_by_name( variable_token );
+			variable.set_symbol_value( result );
+
+			table.delete_symbol( variable_token );
+			table.insert_symbol( variable );
+
+		} else
+		{
+			// Nothing To Do
+		}
+
+	} else
+	{
+		// Nothing To Do
+	}
+
+	Symbol variable = table.find_symbol_by_name( variable_token );
+	variable.set_symbol_value( value_token );
+
+	table.delete_symbol( variable_token );
+	table.insert_symbol( variable );
+
+	int r_position = value_token.find( "R" );
+	value_token.resize( r_position );
+
+	const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
+	const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
+	const string blank      = table.find_symbol_by_name( " " ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( variable_token );
+	built_string.append( blank );
+	built_string.append( equal );
+	built_string.append( blank );
+	built_string.append( value_token );
+	built_string.append( semi_colon );
+
+	return built_string;
+}
+
 string print_text( const string text_token, SymbolTable &table )
 {
 	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();

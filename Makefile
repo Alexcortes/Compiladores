@@ -4,7 +4,7 @@ portugolC: flex.ll bison.yy
 	mv bison.tab.cc bison.c
 	flex flex.ll
 	mv lex.yy.c flex.c
-	g++ -o portugolC bison.c flex.c Symbol.h Symbol.cpp SymbolTable.h SymbolTable.cpp checks.h checks.cpp rules.h rules.cpp -lm
+	g++ -o portugolC bison.c flex.c Symbol.h Symbol.cpp SymbolTable.h SymbolTable.cpp checks.h checks.cpp codeGenerator.h codeGenerator.cpp -lm
 
 clean:
 	rm flex.c bison.c bison.h portugolC.exe
