@@ -77,23 +77,43 @@ Type:
 
 	};
 
+/* Rule to define how to capture a line of math expression */
 math_expression:
-	math_expression PLUS math_expression {
+	NUMBER {
+		$<text>$ = $<text>1;
+
+	} | math_expression PLUS math_expression {
+
 		const string first_parcel_token( $<text>1 );
 		const string second_parcel_token( $<text>3 );
 
 		char sum[ 100 ];
-		int first_parcel = atoi( first_parcel_token.c_str() );
-		int second_parcel = atoi( second_parcel_token.c_str() );
-		int sum_parcels = first_parcel + second_parcel;
 
-		sprintf(sum, "%d + %dR%d", first_parcel, second_parcel, sum_parcels );
+		int first_parcel = atoi( first_parcel_token.c_str() );
+		int sum_parcels = 0;
+
+		if( check_exist_R( second_parcel_token ) )
+		{
+			int r_position = second_parcel_token.find_last_of( "R" );
+			int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
+
+			string second_parcel = second_parcel_token.substr( 0, r_position );
+			string result_string = second_parcel_token.substr( after_r_position );
+
+			int previous_sum = atoi( result_string.c_str() );
+			
+			sum_parcels = first_parcel + previous_sum;
+			
+			sprintf(sum, "%d + %sR%d", first_parcel, second_parcel.c_str(), sum_parcels );
+		} else
+		{
+			int second_parcel = atoi( second_parcel_token.c_str() );
+			sum_parcels = first_parcel + second_parcel;
+
+			sprintf(sum, "%d + %dR%d", first_parcel, second_parcel, sum_parcels );
+		}
 
 		strcpy( $<text>$, sum );
-
-	} | NUMBER {
-		$<text>$ = $<text>1;
-
 	};
 
 /* Rule to capture lines of text (strings). */
@@ -289,6 +309,6 @@ int main(void) {
    yyparse();
 }
 
-	void yyerror (char const *s) {
-   	printf ("%s\n", s);
-	}
+void yyerror (char const *s) {
+  	printf ("%s\n", s);
+}
