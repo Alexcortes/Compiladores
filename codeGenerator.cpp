@@ -226,7 +226,27 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 
 	if( check_exist_punctual( second_parcel_token ) )
 	{
-		// TODO: Cálculo de soma quando encontrar um ponto
+		float first_parcel = atof( first_parcel_token.c_str() );
+		float sum_parcels = 0;
+
+		if( check_exist_R( second_parcel_token ) )
+		{
+			string second_parcel = separate_parcel_to_result( second_parcel_token ).at( 0 );
+			string result_string = separate_parcel_to_result( second_parcel_token ).at( 1 );
+
+			float previous_sum = atof( result_string.c_str() );
+			
+			sum_parcels = first_parcel + previous_sum;
+			
+			sprintf(sum, "%f + %sR%f", first_parcel, second_parcel.c_str(), sum_parcels );
+		} else
+		{
+			float second_parcel = atof( second_parcel_token.c_str() );
+			sum_parcels = first_parcel + second_parcel;
+
+			sprintf(sum, "%f + %fR%f", first_parcel, second_parcel, sum_parcels );
+		}
+
 	} else
 	{
 		int first_parcel = atoi( first_parcel_token.c_str() );
@@ -234,11 +254,8 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 
 		if( check_exist_R( second_parcel_token ) )
 		{
-			int r_position = second_parcel_token.find_last_of( "R" );
-			int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
-
-			string second_parcel = second_parcel_token.substr( 0, r_position );
-			string result_string = second_parcel_token.substr( after_r_position );
+			string second_parcel = separate_parcel_to_result( second_parcel_token ).at( 0 );
+			string result_string = separate_parcel_to_result( second_parcel_token ).at( 1 );
 
 			int previous_sum = atoi( result_string.c_str() );
 			
@@ -257,5 +274,18 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 	string result_sum( sum );
 
 	return result_sum;
+}
+
+vector<string> separate_parcel_to_result( string second_parcel_token )
+{
+	vector<string> separate_strings;
+	
+	int r_position = second_parcel_token.find_last_of( "R" );
+	int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
+
+	separate_strings[ 0 ] = second_parcel_token.substr( 0, r_position );
+	separate_strings[ 1 ] = second_parcel_token.substr( after_r_position );
+
+	return separate_strings;
 }
 
