@@ -337,6 +337,62 @@ string calculate_minus_expression( string minuend_token, string subtrahend_token
 	return result_difference;
 }
 
+string calculate_times_expression( string first_factor_token, string second_factor_token )
+{
+	char product[ 250 ];
+
+	if( check_exist_punctual( second_factor_token ) )
+	{
+		float first_factor = atof( first_factor_token.c_str() );
+		float product_factors = 0;
+
+		if( check_exist_R( second_factor_token ) )
+		{
+			string second_factor = separate_parcel_to_result( second_factor_token ).at( 0 );
+			string result_string = separate_parcel_to_result( second_factor_token ).at( 1 );
+
+			float previous_product = atof( result_string.c_str() );
+			
+			product_factors = first_factor * previous_product;
+			
+			sprintf( product, "%f * %sR%f", first_factor, second_factor.c_str(), product_factors );
+		} else
+		{
+			float second_factor = atof( second_factor_token.c_str() );
+			product_factors = first_factor * second_factor;
+
+			sprintf( product, "%f * %fR%f", first_factor, second_factor, product_factors );
+		}
+
+	} else
+	{
+		int first_factor = atoi( first_factor_token.c_str() );
+		int product_factors = 0;
+
+		if( check_exist_R( second_factor_token ) )
+		{
+			string second_factor = separate_parcel_to_result( second_factor_token ).at( 0 );
+			string result_string = separate_parcel_to_result( second_factor_token ).at( 1 );
+
+			int previous_product = atoi( result_string.c_str() );
+			
+			product_factors = first_factor * previous_product;
+			
+			sprintf( product, "%d * %sR%d", first_factor, second_factor.c_str(), product_factors );
+		} else
+		{
+			int second_factor = atoi( second_factor_token.c_str() );
+			product_factors = first_factor * second_factor;
+
+			sprintf( product, "%d * %dR%d", first_factor, second_factor, product_factors );
+		}
+	}
+
+	string result_product( product );
+
+	return result_product;
+}
+
 vector<string> separate_parcel_to_result( string second_parcel_token )
 {
 	vector<string> separate_strings;

@@ -22,7 +22,7 @@ string scan_variable( const string, SymbolTable& ); // OK
 
 string calculate_plus_expression( string, string ); // OK
 string calculate_minus_expression( string, string );
-void calculate_times_expression( string, string );
+string calculate_times_expression( string, string );
 void calculate_divide_expression( string, string );
 
 vector<string> separate_parcel_to_result( string ); // OK

@@ -98,6 +98,14 @@ math_expression:
 		string difference = calculate_minus_expression( minuend_token, subtrahend_token );
 		strcpy( $<text>$, difference.c_str() );
 
+	} | math_expression TIMES math_expression {
+
+		const string first_factor_token( $<text>1 );
+		const string second_factor_token( $<text>3 );
+
+		string product = calculate_times_expression( first_factor_token, second_factor_token );
+		strcpy( $<text>$, product.c_str() );
+
 	};
 
 /* Rule to capture lines of text (strings). */
