@@ -240,8 +240,11 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 
 		if( check_exist_R( second_parcel_token ) )
 		{
-			string second_parcel = separate_parcel_to_result( second_parcel_token ).at( 0 );
-			string result_string = separate_parcel_to_result( second_parcel_token ).at( 1 );
+			int r_position = second_parcel_token.find_last_of( "R" );
+			int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
+
+			string second_parcel = second_parcel_token.substr( 0, r_position );
+			string result_string = second_parcel_token.substr( after_r_position );
 
 			float previous_sum = atof( result_string.c_str() );
 			
@@ -263,8 +266,11 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 
 		if( check_exist_R( second_parcel_token ) )
 		{
-			string second_parcel = separate_parcel_to_result( second_parcel_token ).at( 0 );
-			string result_string = separate_parcel_to_result( second_parcel_token ).at( 1 );
+			int r_position = second_parcel_token.find_last_of( "R" );
+			int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
+
+			string second_parcel = second_parcel_token.substr( 0, r_position );
+			string result_string = second_parcel_token.substr( after_r_position );
 
 			int previous_sum = atoi( result_string.c_str() );
 			
@@ -296,8 +302,11 @@ string calculate_minus_expression( string minuend_token, string subtrahend_token
 
 		if( check_exist_R( subtrahend_token ) )
 		{
-			string subtrahend = separate_parcel_to_result( subtrahend_token ).at( 0 );
-			string result_string = separate_parcel_to_result( subtrahend_token ).at( 1 );
+			int r_position = subtrahend_token.find_last_of( "R" );
+			int after_r_position = subtrahend_token.find_last_of( "R" ) + 1;
+
+			string subtrahend = subtrahend_token.substr( 0, r_position );
+			string result_string = subtrahend_token.substr( after_r_position );
 
 			float previous_difference = atof( result_string.c_str() );
 			
@@ -319,8 +328,11 @@ string calculate_minus_expression( string minuend_token, string subtrahend_token
 
 		if( check_exist_R( subtrahend_token ) )
 		{
-			string subtrahend = separate_parcel_to_result( subtrahend_token ).at( 0 );
-			string result_string = separate_parcel_to_result( subtrahend_token ).at( 1 );
+			int r_position = subtrahend_token.find_last_of( "R" );
+			int after_r_position = subtrahend_token.find_last_of( "R" ) + 1;
+
+			string subtrahend = subtrahend_token.substr( 0, r_position );
+			string result_string = subtrahend_token.substr( after_r_position );
 
 			int previous_difference = atoi( result_string.c_str() );
 			
@@ -352,8 +364,11 @@ string calculate_times_expression( string first_factor_token, string second_fact
 
 		if( check_exist_R( second_factor_token ) )
 		{
-			string second_factor = separate_parcel_to_result( second_factor_token ).at( 0 );
-			string result_string = separate_parcel_to_result( second_factor_token ).at( 1 );
+			int r_position = second_factor_token.find_last_of( "R" );
+			int after_r_position = second_factor_token.find_last_of( "R" ) + 1;
+
+			string second_factor = second_factor_token.substr( 0, r_position );
+			string result_string = second_factor_token.substr( after_r_position );
 
 			float previous_product = atof( result_string.c_str() );
 			
@@ -375,8 +390,11 @@ string calculate_times_expression( string first_factor_token, string second_fact
 
 		if( check_exist_R( second_factor_token ) )
 		{
-			string second_factor = separate_parcel_to_result( second_factor_token ).at( 0 );
-			string result_string = separate_parcel_to_result( second_factor_token ).at( 1 );
+			int r_position = second_factor_token.find_last_of( "R" );
+			int after_r_position = second_factor_token.find_last_of( "R" ) + 1;
+
+			string second_factor = second_factor_token.substr( 0, r_position );
+			string result_string = second_factor_token.substr( after_r_position );
 
 			int previous_product = atoi( result_string.c_str() );
 			
@@ -395,18 +413,5 @@ string calculate_times_expression( string first_factor_token, string second_fact
 	string result_product( product );
 
 	return result_product;
-}
-
-vector<string> separate_parcel_to_result( string second_parcel_token )
-{
-	vector<string> separate_strings;
-	
-	int r_position = second_parcel_token.find_last_of( "R" );
-	int after_r_position = second_parcel_token.find_last_of( "R" ) + 1;
-
-	separate_strings[ 0 ] = second_parcel_token.substr( 0, r_position );
-	separate_strings[ 1 ] = second_parcel_token.substr( after_r_position );
-
-	return separate_strings;
 }
 
