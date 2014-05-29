@@ -21,7 +21,7 @@ string print_variable( const string, SymbolTable& ); // OK
 string scan_variable( const string, SymbolTable& ); // OK
 
 string calculate_plus_expression( string, string ); // OK
-void calculate_minus_expression( string, string );
+string calculate_minus_expression( string, string );
 void calculate_times_expression( string, string );
 void calculate_divide_expression( string, string );
 

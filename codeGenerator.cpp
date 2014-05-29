@@ -243,13 +243,13 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 			
 			sum_parcels = first_parcel + previous_sum;
 			
-			sprintf(sum, "%f + %sR%f", first_parcel, second_parcel.c_str(), sum_parcels );
+			sprintf( sum, "%f + %sR%f", first_parcel, second_parcel.c_str(), sum_parcels );
 		} else
 		{
 			float second_parcel = atof( second_parcel_token.c_str() );
 			sum_parcels = first_parcel + second_parcel;
 
-			sprintf(sum, "%f + %fR%f", first_parcel, second_parcel, sum_parcels );
+			sprintf( sum, "%f + %fR%f", first_parcel, second_parcel, sum_parcels );
 		}
 
 	} else
@@ -266,19 +266,75 @@ string calculate_plus_expression( string first_parcel_token, string second_parce
 			
 			sum_parcels = first_parcel + previous_sum;
 			
-			sprintf(sum, "%d + %sR%d", first_parcel, second_parcel.c_str(), sum_parcels );
+			sprintf( sum, "%d + %sR%d", first_parcel, second_parcel.c_str(), sum_parcels );
 		} else
 		{
 			int second_parcel = atoi( second_parcel_token.c_str() );
 			sum_parcels = first_parcel + second_parcel;
 
-			sprintf(sum, "%d + %dR%d", first_parcel, second_parcel, sum_parcels );
+			sprintf( sum, "%d + %dR%d", first_parcel, second_parcel, sum_parcels );
 		}
 	}
 
 	string result_sum( sum );
 
 	return result_sum;
+}
+
+string calculate_minus_expression( string minuend_token, string subtrahend_token )
+{
+	char difference[ 250 ];
+
+	if( check_exist_punctual( subtrahend_token ) )
+	{
+		float minuend = atof( minuend_token.c_str() );
+		float difference_parcels = 0;
+
+		if( check_exist_R( subtrahend_token ) )
+		{
+			string subtrahend = separate_parcel_to_result( subtrahend_token ).at( 0 );
+			string result_string = separate_parcel_to_result( subtrahend_token ).at( 1 );
+
+			float previous_difference = atof( result_string.c_str() );
+			
+			difference_parcels = minuend - previous_difference;
+			
+			sprintf( difference, "%f - %sR%f", minuend, subtrahend.c_str(), difference_parcels );
+		} else
+		{
+			float subtrahend = atof( subtrahend_token.c_str() );
+			difference_parcels = minuend - subtrahend;
+
+			sprintf( difference, "%f - %fR%f", minuend, subtrahend, difference_parcels );
+		}
+
+	} else
+	{
+		int minuend = atoi( minuend_token.c_str() );
+		int difference_parcels = 0;
+
+		if( check_exist_R( subtrahend_token ) )
+		{
+			string subtrahend = separate_parcel_to_result( subtrahend_token ).at( 0 );
+			string result_string = separate_parcel_to_result( subtrahend_token ).at( 1 );
+
+			int previous_difference = atoi( result_string.c_str() );
+			
+			difference_parcels = minuend - previous_difference;
+			
+			sprintf( difference, "%d - %sR%d", minuend, subtrahend.c_str(), difference_parcels );
+		} else
+		{
+			int subtrahend = atoi( subtrahend_token.c_str() );
+			difference_parcels = minuend - subtrahend;
+
+			sprintf( difference, "%d - %dR%d", minuend, subtrahend, difference_parcels );
+		}
+	}
+
+	string result_difference( difference );
+
+	return result_difference;
 }
 
 vector<string> separate_parcel_to_result( string second_parcel_token )

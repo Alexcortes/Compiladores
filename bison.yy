@@ -89,6 +89,15 @@ math_expression:
 
 		string sum = calculate_plus_expression( first_parcel_token, second_parcel_token );
 		strcpy( $<text>$, sum.c_str() );
+
+	} | math_expression MINUS math_expression {
+
+		const string minuend_token( $<text>1 );
+		const string subtrahend_token( $<text>3 );
+
+		string difference = calculate_minus_expression( minuend_token, subtrahend_token );
+		strcpy( $<text>$, difference.c_str() );
+
 	};
 
 /* Rule to capture lines of text (strings). */
