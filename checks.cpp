@@ -36,8 +36,6 @@ string check_variable_type( const string variable_type )
 
 string check_value_type( const string value_string )
 {
-	const int length_string = value_string.size();
-
 	if( check_is_string( value_string ) )
 	{
 		return "char*";
@@ -75,7 +73,7 @@ bool check_is_string( const string value_string )
 
 	const string first_char( &value_string[ 0 ], 1 ); // Converting char to std::string
 
-	if( !first_char.compare( "\"" ) )
+	if( !first_char.compare( "\"" ) && value_string.size() != 1 )
 	{
 		is_string = true;
 		
@@ -89,20 +87,21 @@ bool check_is_string( const string value_string )
 
 bool check_is_char( const string value_string )
 {
-	bool is_string;
+	bool is_char;
 
 	const string first_char( &value_string[ 0 ], 1 );
+	const int length_string = value_string.size() + 2;
 
-	if( !first_char.compare( "\'" ) )
+	if( !first_char.compare( "\"" ) && length_string == 3 )
 	{
-		is_string = true;
+		is_char = true;
 		
 	} else
 	{
-		is_string = false;
+		is_char = false;
 	}
 	
-	return is_string;
+	return is_char;
 }
 
 bool check_exist_punctual( const string value_string )

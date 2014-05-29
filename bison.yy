@@ -52,6 +52,8 @@
 %token TIMES
 %token EQUAL
 
+%token IF
+
 %start program
 
 %%
@@ -121,6 +123,7 @@ content_program:
 	| attribution
 	| output
 	| input
+	| condition_expression
 	;
 
 /* Rule that starts the program. There are two essential things are set to the proper 
@@ -164,8 +167,8 @@ attribution:
 			const string type = table.find_symbol_by_name( variable_token ).get_symbol_type();
 			const string value_type = check_value_type( value_token );
 
-			/* The function string::compare() return zero if the strings are equal. So, to pass in test
-				it is necessary transform zero (false) in one (true). */
+			/* The function string::compare() return zero if the strings are equal. So, to 
+				pass in test it is necessary transform zero (false) in one (true). */
 			if( !type.compare( value_type ) )
 			{
 				string built_string = attribute_variable( variable_token, value_token, table );
@@ -226,6 +229,36 @@ input:
 
 			strcpy( $<text>$, built_string.c_str() );
 
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
+	};
+
+condition_expression:
+	IF VARIABLE {
+		const string variable_token( $<text>2 );
+
+		if( table.exist_symbol( variable_token ) )
+		{
+			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
+			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
+			const string blank      		 = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string If					 = table.find_symbol_by_name( "if" ).get_symbol_name();
+		
+			string built_string = "";
+
+			built_string.append( If );
+			built_string.append( open_parenthesis );
+			built_string.append( blank );
+			built_string.append( variable_token );
+			built_string.append( blank );
+			built_string.append( close_parenthesis );
+
+			cout << built_string;
+
+			strcpy( $<text>$, built_string.c_str() );
 		} else
 		{
 			cout << "Variável não declarada!" << endl;

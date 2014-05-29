@@ -34,6 +34,9 @@ BOOLEAN		{TRUE}|{FALSE}
 "escreva"	return(PRINTF);
 "leia"		return(SCANF);
 
+(?# Termos para expressões condicionais )
+"se"	return(IF);
+
 (?# Identificadores matemáticos )
 "+" return(PLUS);
 "=" return(EQUAL);

@@ -35,6 +35,7 @@ void initialize_symbol_table( SymbolTable &table )
 	Symbol printf( "printf" );
 	Symbol scanf( "scanf" );
 	Symbol include( "include" );
+	Symbol If( "if" );
 
 	table.insert_symbol( comma );
 	table.insert_symbol( semi_colon );
@@ -55,6 +56,7 @@ void initialize_symbol_table( SymbolTable &table )
 	table.insert_symbol( printf );
 	table.insert_symbol( scanf );
 	table.insert_symbol( include );
+	table.insert_symbol( If );
 }
 
 void start_program( SymbolTable &table )
@@ -107,24 +109,27 @@ string attribute_variable( string variable_token, string value_token, SymbolTabl
 			table.delete_symbol( variable_token );
 			table.insert_symbol( variable );
 
+			int r_position = value_token.find( "R" );
+			value_token.resize( r_position );
+
 		} else
 		{
-			// Nothing To Do
+			Symbol variable = table.find_symbol_by_name( variable_token );
+			variable.set_symbol_value( value_token );
+
+			table.delete_symbol( variable_token );
+			table.insert_symbol( variable );		
 		}
 
 	} else
 	{
-		// Nothing To Do
+		Symbol variable = table.find_symbol_by_name( variable_token );
+		variable.set_symbol_value( value_token );
+
+		table.delete_symbol( variable_token );
+		table.insert_symbol( variable );
+
 	}
-
-	Symbol variable = table.find_symbol_by_name( variable_token );
-	variable.set_symbol_value( value_token );
-
-	table.delete_symbol( variable_token );
-	table.insert_symbol( variable );
-
-	int r_position = value_token.find( "R" );
-	value_token.resize( r_position );
 
 	const string equal      = table.find_symbol_by_name( "=" ).get_symbol_name();
 	const string semi_colon = table.find_symbol_by_name( ";" ).get_symbol_name();
