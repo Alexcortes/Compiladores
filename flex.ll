@@ -44,6 +44,13 @@ BOOLEAN		{TRUE}|{FALSE}
 "/" return(DIVIDE);
 "*" return(TIMES);
 
+(?# Identificadores lógicos)
+">" return(BIGGER);
+"<" return(SMALLER);
+"<>" return(DIFFERENT);
+"e" return(AND);
+"ou" return(OR);
+
 (?# Pontuação permitida )
 ":" return(COLON);
 ":=" return(ATTRIBUTION);

@@ -21,12 +21,15 @@ void initialize_symbol_table( SymbolTable &table )
 	Symbol blank( " " );
 
 	Symbol equal( "=" );
-   Symbol plus( "+" );
+ 	Symbol plus( "+" );
 	Symbol minus( "-" );
 	Symbol divide( "/" );
 	Symbol times( "*" );
 	Symbol smaller( "<" );
 	Symbol bigger( ">" );
+	Symbol different("!=");
+	Symbol s_and("&&");
+	Symbol s_or("||");
 	Symbol hashtag( "#" );
 
 	Symbol open_parenthesis( "(" );
@@ -42,12 +45,13 @@ void initialize_symbol_table( SymbolTable &table )
 	table.insert_symbol( blank );
 
 	table.insert_symbol( equal );
-   table.insert_symbol( plus ); 
+   	table.insert_symbol( plus ); 
 	table.insert_symbol( minus );
 	table.insert_symbol( divide );
 	table.insert_symbol( times );
 	table.insert_symbol( smaller );
 	table.insert_symbol( bigger );
+	table.insert_symbol( different );
 	table.insert_symbol( hashtag );
 
 	table.insert_symbol( open_parenthesis );
