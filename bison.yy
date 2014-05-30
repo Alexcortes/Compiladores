@@ -114,6 +114,13 @@ math_expression:
 		string product = calculate_times_expression( first_factor_token, second_factor_token );
 		strcpy( $<text>$, product.c_str() );
 
+	} | math_expression DIVIDE math_expression {
+
+		const string first_factor_token( $<text>1 );
+		const string second_factor_token( $<text>3 );
+
+		string division = calculate_divide_expression( first_factor_token, second_factor_token );
+		strcpy( $<text>$, division.c_str() );
 	};
 
 

@@ -436,13 +436,13 @@ string calculate_divide_expression( string dividend_token , string divisor_token
 			
 			divide_elements = dividend / previous_result;
 			
-			sprintf( product, "%f * %sR%f", dividend, divisor.c_str(), divide_elements );
+			sprintf( division, "%f / %sR%f", dividend, divisor.c_str(), divide_elements );
 		} else
 		{
 			float divisor = atof( divisor_token.c_str() );
 			divide_elements = dividend / divisor;
 
-			sprintf( division, "%f * %fR%f", dividend, divisor, divide_elements );
+			sprintf( division, "%f / %fR%f", dividend, divisor, divide_elements );
 		}
 
 	} else
@@ -458,17 +458,17 @@ string calculate_divide_expression( string dividend_token , string divisor_token
 			string divisor = divisor_token.substr( 0, r_position );
 			string result_string = divisor_token.substr( after_r_position );
 
-			int previous_product = atoi( result_string.c_str() );
+			int previous_division = atoi( result_string.c_str() );
 			
-			divide_elements = dividend / divisor;
+			divide_elements = dividend / previous_division;
 			
-			sprintf( division, "%d * %sR%d", dividend, divisor.c_str(), divide_elements );
+			sprintf( division, "%d / %sR%d", dividend, divisor.c_str(), divide_elements );
 		} else
 		{
 			int divisor = atoi( divisor_token.c_str() );
 			divide_elements = dividend / divisor;
 
-			sprintf( division, "%d * %dR%d", dividend_token, divisor_token, divide_elements );
+			sprintf( division, "%d / %dR%d", dividend, divisor, divide_elements );
 		}
 	}
 
