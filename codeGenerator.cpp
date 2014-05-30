@@ -415,3 +415,65 @@ string calculate_times_expression( string first_factor_token, string second_fact
 	return result_product;
 }
 
+string calculate_divide_expression( string dividend_token , string divisor_token)
+{
+	char division[ 250 ];
+	
+	if( check_exist_punctual( divisor_token ) )
+	{
+		float dividend = atof( dividend_token.c_str() );
+		float divide_elements = 0;
+
+		if( check_exist_R( divisor_token ) )
+		{
+			int r_position = divisor_token.find_last_of( "R" );
+			int after_r_position = divisor_token.find_last_of( "R" ) + 1;
+
+			string divisor = divisor_token.substr( 0, r_position );
+			string result_string = divisor_token.substr( after_r_position );
+
+			float previous_result = atof( result_string.c_str() );
+			
+			divide_elements = dividend / previous_result;
+			
+			sprintf( product, "%f * %sR%f", dividend, divisor.c_str(), divide_elements );
+		} else
+		{
+			float divisor = atof( divisor_token.c_str() );
+			divide_elements = dividend / divisor;
+
+			sprintf( division, "%f * %fR%f", dividend, divisor, divide_elements );
+		}
+
+	} else
+	{
+		int dividend = atoi( dividend_token.c_str() );
+		int divide_elements = 0;
+
+		if( check_exist_R( divisor_token ) )
+		{
+			int r_position = divisor_token.find_last_of( "R" );
+			int after_r_position = divisor_token.find_last_of( "R" ) + 1;
+
+			string divisor = divisor_token.substr( 0, r_position );
+			string result_string = divisor_token.substr( after_r_position );
+
+			int previous_product = atoi( result_string.c_str() );
+			
+			divide_elements = dividend / divisor;
+			
+			sprintf( division, "%d * %sR%d", dividend, divisor.c_str(), divide_elements );
+		} else
+		{
+			int divisor = atoi( divisor_token.c_str() );
+			divide_elements = dividend / divisor;
+
+			sprintf( division, "%d * %dR%d", dividend_token, divisor_token, divide_elements );
+		}
+	}
+
+	string result_division( division );
+
+	return result_division;
+}
+

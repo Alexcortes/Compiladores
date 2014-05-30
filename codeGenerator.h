@@ -23,6 +23,6 @@ string scan_variable( const string, SymbolTable& );
 string calculate_plus_expression( string, string );
 string calculate_minus_expression( string, string );
 string calculate_times_expression( string, string );
-void calculate_divide_expression( string, string );
+string calculate_divide_expression( string, string );
 
 #endif
