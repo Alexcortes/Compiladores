@@ -64,7 +64,7 @@
 
 %%
 /* Rule to capture the type of variables. */
-Type:
+type:
 	TYPE_INT {
 		char Int[] = "int";
 		$<text>$ = Int;
@@ -175,7 +175,7 @@ end_of_program:
 
 /* Rule that defines how a variable must be declared. */
 declaration:
-	VARIABLE COLON Type {
+	VARIABLE COLON type {
 		const string variable_token( $<text>1 );
 		const string type_token( $<text>3 );
 
