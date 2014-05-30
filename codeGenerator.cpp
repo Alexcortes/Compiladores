@@ -20,6 +20,7 @@ void initialize_symbol_table( SymbolTable &table )
 	Symbol semi_colon( ";" );
 	Symbol blank( " " );
 
+	Symbol equality( "==" );
 	Symbol equal( "=" );
  	Symbol plus( "+" );
 	Symbol minus( "-" );
@@ -44,8 +45,9 @@ void initialize_symbol_table( SymbolTable &table )
 	table.insert_symbol( semi_colon );
 	table.insert_symbol( blank );
 
+	table.insert_symbol( equality );
 	table.insert_symbol( equal );
-   	table.insert_symbol( plus ); 
+  	table.insert_symbol( plus ); 
 	table.insert_symbol( minus );
 	table.insert_symbol( divide );
 	table.insert_symbol( times );

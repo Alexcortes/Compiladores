@@ -269,143 +269,80 @@ input:
 		}
 	};
 
+/* TODO: verificações de tipagem. Um NUMBER é do mesmo tipo do NUMBER em comparação? */
 logical_expression:
 		NUMBER BIGGER NUMBER {
-
 		const string logical_token( $<text>2 );
-		const string first_parcel_token( $<text>1 );
-		const string second_parcel_token( $<text>3 );
+		const string first_number_token( $<text>1 );
+		const string second_number_token( $<text>3 );
 
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string bigger_symbol    = table.find_symbol_by_name( ">" ).get_symbol_name();
+		const string bigger_symbol     = table.find_symbol_by_name( ">" ).get_symbol_name();
 		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
-		built_string.append( open_parenthesis );
+		built_string.append( first_number_token );
 		built_string.append( blank );
-		built_string.append( first_parcel_token );
 		built_string.append( bigger_symbol );
-		built_string.append( second_parcel_token );
 		built_string.append( blank );
-		built_string.append( close_parenthesis );
+		built_string.append( second_number_token );
 
 		strcpy( $<text>$, built_string.c_str() );
 
-	}| NUMBER SMALLER NUMBER {
-
+	} | NUMBER SMALLER NUMBER {
 		const string logical_token( $<text>2 );
-		const string first_parcel_token( $<text>1 );
-		const string second_parcel_token( $<text>3 );
+		const string first_number_token( $<text>1 );
+		const string second_number_token( $<text>3 );
 
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 		const string smaller_symbol    = table.find_symbol_by_name( "<" ).get_symbol_name();
 		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
-		built_string.append( open_parenthesis );
+		built_string.append( first_number_token );
 		built_string.append( blank );
-		built_string.append( first_parcel_token );
 		built_string.append( smaller_symbol );
-		built_string.append( second_parcel_token );
 		built_string.append( blank );
-		built_string.append( close_parenthesis );
+		built_string.append( second_number_token );
 
-			
 		strcpy( $<text>$, built_string.c_str() );
 
-	}| NUMBER EQUAL NUMBER {
-
+	} | NUMBER EQUAL NUMBER {
 		const string logical_token( $<text>2 );
-		const string first_parcel_token( $<text>1 );
-		const string second_parcel_token( $<text>3 );
+		const string first_number_token( $<text>1 );
+		const string second_number_token( $<text>3 );
 
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string equal_symbol      = table.find_symbol_by_name( "=" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string equality_symbol    = table.find_symbol_by_name( "==" ).get_symbol_name();
+		const string blank              = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
-		built_string.append( open_parenthesis );
+		built_string.append( first_number_token );
 		built_string.append( blank );
-		built_string.append( first_parcel_token );
-		built_string.append( equal_symbol );
-		built_string.append( second_parcel_token );
+		built_string.append( equality_symbol );
 		built_string.append( blank );
-		built_string.append( close_parenthesis );
+		built_string.append( second_number_token );
 
-			
 		strcpy( $<text>$, built_string.c_str() );
 
-	}| NUMBER DIFFERENT NUMBER {
-
+	} | NUMBER DIFFERENT NUMBER {
 		const string logical_token( $<text>2 );
-		const string first_parcel_token( $<text>1 );
-		const string second_parcel_token( $<text>3 );
+		const string first_number_token( $<text>1 );
+		const string second_number_token( $<text>3 );
 
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string different_symbol  = table.find_symbol_by_name( "!=" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string diferent_symbol    = table.find_symbol_by_name( "!=" ).get_symbol_name();
+		const string blank              = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
-		built_string.append( open_parenthesis );
+		built_string.append( first_number_token );
 		built_string.append( blank );
-		built_string.append( first_parcel_token );
-		built_string.append( different_symbol );
-		built_string.append( second_parcel_token );
+		built_string.append( diferent_symbol );
 		built_string.append( blank );
-		built_string.append( close_parenthesis );
-
+		built_string.append( second_number_token );
 			
 		strcpy( $<text>$, built_string.c_str() );
 	
-	}|logical_expression AND logical_expression{
-		const string first_expression_token ( $<text>1 );
-		const string second_expression_token ( $<text>2 );
-
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string and_symbol        = table.find_symbol_by_name( "&&" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-
-		string built_string = "";
-
-		built_string.append( open_parenthesis );
-		built_string.append( blank );
-		built_string.append( first_expression_token );
-		built_string.append( blank );
-		built_string.append( and_symbol );
-		built_string.append( blank );
-		built_string.append( second_expression_token );
-
-		strcpy( $<text>$, built_string.c_str() );
-
-	}|logical_expression OR logical_expression{
-		const string first_expression_token ( $<text>1 );
-		const string second_expression_token ( $<text>2 );
-
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string or_symbol         = table.find_symbol_by_name( "||" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-
-		string built_string = "";
-
-		built_string.append( open_parenthesis );
-		built_string.append( blank );
-		built_string.append( first_expression_token );
-		built_string.append( blank );
-		built_string.append( or_symbol );
-		built_string.append( blank );
-		built_string.append( second_expression_token );
-
-		strcpy( $<text>$, built_string.c_str() );
 	};
 
 condition_expression:
@@ -417,7 +354,7 @@ condition_expression:
 			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
 			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 			const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-			const string If		       = table.find_symbol_by_name( "if" ).get_symbol_name();
+			const string If		       	 = table.find_symbol_by_name( "if" ).get_symbol_name();
 		
 			string built_string = "";
 
@@ -436,13 +373,14 @@ condition_expression:
 			cout << "Variável não declarada!" << endl;
 			return UNDECLARED_VARIABLE;
 		}
-	}| IF logical_expression{
+
+	} | IF logical_expression{
 		const string logical_expression_token( $<text>2 );
 
 		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
 		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-		const string If		       = table.find_symbol_by_name( "if" ).get_symbol_name();	
+		const string If		       	 = table.find_symbol_by_name( "if" ).get_symbol_name();	
 		
 		string built_string = "";
 
