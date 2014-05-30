@@ -272,12 +272,11 @@ input:
 /* TODO: verificações de tipagem. Um NUMBER é do mesmo tipo do NUMBER em comparação? */
 logical_expression:
 		NUMBER BIGGER NUMBER {
-		const string logical_token( $<text>2 );
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string bigger_symbol     = table.find_symbol_by_name( ">" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
+		const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
@@ -290,12 +289,11 @@ logical_expression:
 		strcpy( $<text>$, built_string.c_str() );
 
 	} | NUMBER SMALLER NUMBER {
-		const string logical_token( $<text>2 );
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string smaller_symbol    = table.find_symbol_by_name( "<" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
+		const string blank          = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
@@ -308,12 +306,11 @@ logical_expression:
 		strcpy( $<text>$, built_string.c_str() );
 
 	} | NUMBER EQUAL NUMBER {
-		const string logical_token( $<text>2 );
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string equality_symbol    = table.find_symbol_by_name( "==" ).get_symbol_name();
-		const string blank              = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
+		const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
@@ -326,12 +323,11 @@ logical_expression:
 		strcpy( $<text>$, built_string.c_str() );
 
 	} | NUMBER DIFFERENT NUMBER {
-		const string logical_token( $<text>2 );
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string diferent_symbol    = table.find_symbol_by_name( "!=" ).get_symbol_name();
-		const string blank              = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string diferent_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
+		const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
 
 		string built_string = "";
 
@@ -343,6 +339,105 @@ logical_expression:
 			
 		strcpy( $<text>$, built_string.c_str() );
 	
+	} | VARIABLE BIGGER VARIABLE {
+		const string first_variable_token( $<text>1 );
+		const string second_variable_token( $<text>3 );
+
+		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
+		{
+			const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
+			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+
+			string built_string = "";
+
+			built_string.append( first_variable_token );
+			built_string.append( blank );
+			built_string.append( bigger_symbol );
+			built_string.append( blank );
+			built_string.append( second_variable_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
+
+	} | VARIABLE SMALLER VARIABLE {
+		const string first_variable_token( $<text>1 );
+		const string second_variable_token( $<text>3 );
+
+		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
+		{
+			const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
+			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+
+			string built_string = "";
+
+			built_string.append( first_variable_token );
+			built_string.append( blank );
+			built_string.append( smaller_symbol );
+			built_string.append( blank );
+			built_string.append( second_variable_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
+
+	} | VARIABLE EQUAL VARIABLE {
+		const string first_variable_token( $<text>1 );
+		const string second_variable_token( $<text>3 );
+
+		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
+		{
+			const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
+			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+
+			string built_string = "";
+
+			built_string.append( first_variable_token );
+			built_string.append( blank );
+			built_string.append( equality_symbol );
+			built_string.append( blank );
+			built_string.append( second_variable_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
+
+	} | VARIABLE DIFFERENT VARIABLE {
+		const string first_variable_token( $<text>1 );
+		const string second_variable_token( $<text>3 );
+
+		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
+		{
+			const string different_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
+			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+
+			string built_string = "";
+
+			built_string.append( first_variable_token );
+			built_string.append( blank );
+			built_string.append( different_symbol );
+			built_string.append( blank );
+			built_string.append( second_variable_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+			cout << "Variável não declarada!" << endl;
+			return UNDECLARED_VARIABLE;
+		}
 	};
 
 condition_expression:
