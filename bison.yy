@@ -275,69 +275,125 @@ logical_expression:
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
-		const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string first_number_type  = check_value_type( first_number_token );
+		const string second_number_type = check_value_type( second_number_token );
 
-		string built_string = "";
+		/* The function string::compare() return zero if the strings are equal. So, to 
+			pass in test it is necessary transform zero (false) in one (true). */
+		if( !first_number_type.compare( second_number_type ) )
+		{
+			const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
+			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
 
-		built_string.append( first_number_token );
-		built_string.append( blank );
-		built_string.append( bigger_symbol );
-		built_string.append( blank );
-		built_string.append( second_number_token );
+			string built_string = "";
 
-		strcpy( $<text>$, built_string.c_str() );
+			built_string.append( first_number_token );
+			built_string.append( blank );
+			built_string.append( bigger_symbol );
+			built_string.append( blank );
+			built_string.append( second_number_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+		}
 
 	} | NUMBER SMALLER NUMBER {
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
-		const string blank          = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string first_number_type  = check_value_type( first_number_token );
+		const string second_number_type = check_value_type( second_number_token );
 
-		string built_string = "";
+		/* The function string::compare() return zero if the strings are equal. So, to 
+			pass in test it is necessary transform zero (false) in one (true). */
+		if( !first_number_type.compare( second_number_type ) )
+		{
+			const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
+			const string blank          = table.find_symbol_by_name( " " ).get_symbol_name();
 
-		built_string.append( first_number_token );
-		built_string.append( blank );
-		built_string.append( smaller_symbol );
-		built_string.append( blank );
-		built_string.append( second_number_token );
+			string built_string = "";
 
-		strcpy( $<text>$, built_string.c_str() );
+			built_string.append( first_number_token );
+			built_string.append( blank );
+			built_string.append( smaller_symbol );
+			built_string.append( blank );
+			built_string.append( second_number_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+		}
 
 	} | NUMBER EQUAL NUMBER {
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
-		const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string first_number_type  = check_value_type( first_number_token );
+		const string second_number_type = check_value_type( second_number_token );
 
-		string built_string = "";
+		/* The function string::compare() return zero if the strings are equal. So, to 
+			pass in test it is necessary transform zero (false) in one (true). */
+		if( !first_number_type.compare( second_number_type ) )
+		{
+			const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
+			const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
 
-		built_string.append( first_number_token );
-		built_string.append( blank );
-		built_string.append( equality_symbol );
-		built_string.append( blank );
-		built_string.append( second_number_token );
+			string built_string = "";
 
-		strcpy( $<text>$, built_string.c_str() );
+			built_string.append( first_number_token );
+			built_string.append( blank );
+			built_string.append( equality_symbol );
+			built_string.append( blank );
+			built_string.append( second_number_token );
+
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+		}
 
 	} | NUMBER DIFFERENT NUMBER {
 		const string first_number_token( $<text>1 );
 		const string second_number_token( $<text>3 );
 
-		const string diferent_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
-		const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string first_number_type  = check_value_type( first_number_token );
+		const string second_number_type = check_value_type( second_number_token );
 
-		string built_string = "";
+		/* The function string::compare() return zero if the strings are equal. So, to 
+			pass in test it is necessary transform zero (false) in one (true). */
+		if( !first_number_type.compare( second_number_type ) )
+		{
+			const string diferent_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
+			const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
 
-		built_string.append( first_number_token );
-		built_string.append( blank );
-		built_string.append( diferent_symbol );
-		built_string.append( blank );
-		built_string.append( second_number_token );
+			string built_string = "";
+
+			built_string.append( first_number_token );
+			built_string.append( blank );
+			built_string.append( diferent_symbol );
+			built_string.append( blank );
+			built_string.append( second_number_token );
 			
-		strcpy( $<text>$, built_string.c_str() );
+			strcpy( $<text>$, built_string.c_str() );
+
+		} else
+		{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+		}
 	
 	} | VARIABLE BIGGER VARIABLE {
 		const string first_variable_token( $<text>1 );
@@ -345,18 +401,32 @@ logical_expression:
 
 		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
 		{
-			const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
-			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string first_variable_type  = check_value_type( first_variable_token );
+			const string second_variable_type = check_value_type( second_variable_token );
 
-			string built_string = "";
+			/* The function string::compare() return zero if the strings are equal. So, to 
+				pass in test it is necessary transform zero (false) in one (true). */
+			if( !first_variable_type.compare( second_variable_type ) )
+			{
+				const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
+				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
 
-			built_string.append( first_variable_token );
-			built_string.append( blank );
-			built_string.append( bigger_symbol );
-			built_string.append( blank );
-			built_string.append( second_variable_token );
+				string built_string = "";
 
-			strcpy( $<text>$, built_string.c_str() );
+				built_string.append( first_variable_token );
+				built_string.append( blank );
+				built_string.append( bigger_symbol );
+				built_string.append( blank );
+				built_string.append( second_variable_token );
+
+				strcpy( $<text>$, built_string.c_str() );
+
+			} else
+			{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+			}
 
 		} else
 		{
@@ -370,18 +440,32 @@ logical_expression:
 
 		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
 		{
-			const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
-			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string first_variable_type  = check_value_type( first_variable_token );
+			const string second_variable_type = check_value_type( second_variable_token );
 
-			string built_string = "";
+			/* The function string::compare() return zero if the strings are equal. So, to 
+				pass in test it is necessary transform zero (false) in one (true). */
+			if( !first_variable_type.compare( second_variable_type ) )
+			{
+				const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
+				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
 
-			built_string.append( first_variable_token );
-			built_string.append( blank );
-			built_string.append( smaller_symbol );
-			built_string.append( blank );
-			built_string.append( second_variable_token );
+				string built_string = "";
 
-			strcpy( $<text>$, built_string.c_str() );
+				built_string.append( first_variable_token );
+				built_string.append( blank );
+				built_string.append( smaller_symbol );
+				built_string.append( blank );
+				built_string.append( second_variable_token );
+
+				strcpy( $<text>$, built_string.c_str() );
+
+			} else
+			{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+			}
 
 		} else
 		{
@@ -395,18 +479,32 @@ logical_expression:
 
 		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
 		{
-			const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
-			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string first_variable_type  = check_value_type( first_variable_token );
+			const string second_variable_type = check_value_type( second_variable_token );
 
-			string built_string = "";
+			/* The function string::compare() return zero if the strings are equal. So, to 
+				pass in test it is necessary transform zero (false) in one (true). */
+			if( !first_variable_type.compare( second_variable_type ) )
+			{
+				const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
+				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
 
-			built_string.append( first_variable_token );
-			built_string.append( blank );
-			built_string.append( equality_symbol );
-			built_string.append( blank );
-			built_string.append( second_variable_token );
+				string built_string = "";
 
-			strcpy( $<text>$, built_string.c_str() );
+				built_string.append( first_variable_token );
+				built_string.append( blank );
+				built_string.append( equality_symbol );
+				built_string.append( blank );
+				built_string.append( second_variable_token );
+
+				strcpy( $<text>$, built_string.c_str() );
+
+			} else
+			{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+			}
 
 		} else
 		{
@@ -420,18 +518,32 @@ logical_expression:
 
 		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
 		{
-			const string different_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
-			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+			const string first_variable_type  = check_value_type( first_variable_token );
+			const string second_variable_type = check_value_type( second_variable_token );
 
-			string built_string = "";
+			/* The function string::compare() return zero if the strings are equal. So, to 
+				pass in test it is necessary transform zero (false) in one (true). */
+			if( !first_variable_type.compare( second_variable_type ) )
+			{
+				const string different_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
+				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
 
-			built_string.append( first_variable_token );
-			built_string.append( blank );
-			built_string.append( different_symbol );
-			built_string.append( blank );
-			built_string.append( second_variable_token );
+				string built_string = "";
 
-			strcpy( $<text>$, built_string.c_str() );
+				built_string.append( first_variable_token );
+				built_string.append( blank );
+				built_string.append( different_symbol );
+				built_string.append( blank );
+				built_string.append( second_variable_token );
+
+				strcpy( $<text>$, built_string.c_str() );
+
+			} else
+			{
+				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
+					  << "correspondem." << endl;
+				return IMPOSSIBLE_TO_ASSIGN;
+			}
 
 		} else
 		{
