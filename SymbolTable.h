@@ -6,10 +6,6 @@
 
 #include "Symbol.h"
 
-#define UNDECLARED_VARIABLE -1
-#define VARIABLE_ALREADY_DECLARED -2
-#define IMPOSSIBLE_TO_ASSIGN -3
-
 using namespace std;
 
 /* This class is the symbol table that are part of the lexical and 

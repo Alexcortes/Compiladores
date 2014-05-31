@@ -8,6 +8,7 @@
 	#include <string>
 	#include <vector>
 
+	#include "messageAndLog.h"
 	#include "codeGenerator.h"
 	#include "checks.h"
 	#include "Symbol.h"
@@ -184,7 +185,7 @@ declaration:
 			declare_variable( variable_token, type_token, table);
 		} else
 		{
-			cout << "Variável já declarada!" << endl;
+			print_message_variable_already_declared();
 			return VARIABLE_ALREADY_DECLARED;
 		}
 	};
@@ -211,14 +212,13 @@ attribution:
 
 			} else
 			{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
+				print_message_impossible_to_assign();
 				return IMPOSSIBLE_TO_ASSIGN;
 			}
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 	};
@@ -245,7 +245,7 @@ output:
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 	};
@@ -264,12 +264,11 @@ input:
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 	};
 
-/* TODO: verificações de tipagem. Um NUMBER é do mesmo tipo do NUMBER em comparação? */
 logical_expression:
 		NUMBER BIGGER NUMBER {
 		const string first_number_token( $<text>1 );
@@ -297,9 +296,8 @@ logical_expression:
 
 		} else
 		{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+			print_message_impossible_comparison();
+			return IMPOSSIBLE_COMPARISON;
 		}
 
 	} | NUMBER SMALLER NUMBER {
@@ -328,9 +326,8 @@ logical_expression:
 
 		} else
 		{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+			print_message_impossible_comparison();
+			return IMPOSSIBLE_COMPARISON;
 		}
 
 	} | NUMBER EQUAL NUMBER {
@@ -359,9 +356,8 @@ logical_expression:
 
 		} else
 		{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+			print_message_impossible_comparison();
+			return IMPOSSIBLE_COMPARISON;
 		}
 
 	} | NUMBER DIFFERENT NUMBER {
@@ -390,9 +386,8 @@ logical_expression:
 
 		} else
 		{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+			print_message_impossible_comparison();
+			return IMPOSSIBLE_COMPARISON;
 		}
 	
 	} | VARIABLE BIGGER VARIABLE {
@@ -423,14 +418,13 @@ logical_expression:
 
 			} else
 			{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+				print_message_impossible_comparison();
+				return IMPOSSIBLE_COMPARISON;
 			}
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 
@@ -462,14 +456,13 @@ logical_expression:
 
 			} else
 			{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+				print_message_impossible_comparison();
+				return IMPOSSIBLE_COMPARISON;
 			}
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 
@@ -501,14 +494,13 @@ logical_expression:
 
 			} else
 			{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+				print_message_impossible_comparison();
+				return IMPOSSIBLE_COMPARISON;
 			}
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 
@@ -540,14 +532,13 @@ logical_expression:
 
 			} else
 			{
-				cout << "Não é possível atribuir! O tipo da variável e do valor não " 
-					  << "correspondem." << endl;
-				return IMPOSSIBLE_TO_ASSIGN;
+				print_message_impossible_comparison();
+				return IMPOSSIBLE_COMPARISON;
 			}
 
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 	};
@@ -577,7 +568,7 @@ condition_expression:
 			strcpy( $<text>$, built_string.c_str() );
 		} else
 		{
-			cout << "Variável não declarada!" << endl;
+			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
 
