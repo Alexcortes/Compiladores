@@ -20,6 +20,7 @@
 	void yyerror(const char *);
 
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
+	const bool KEY = DISABLE; // Key to define if the log is enable or disable.
 %}
 
 %union{
