@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "SymbolTable.h"
+
 #define ENABLE true
 #define DISABLE false
 

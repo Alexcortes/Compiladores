@@ -20,7 +20,7 @@
 	void yyerror(const char *);
 
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
-	const bool KEY = DISABLE; // Key to define if the log is enable or disable.
+	const bool KEY = ENABLE; // Key to define if the log is enable or disable.
 %}
 
 %union{
@@ -282,16 +282,8 @@ logical_expression:
 			pass in test it is necessary transform zero (false) in one (true). */
 		if( !first_number_type.compare( second_number_type ) )
 		{
-			const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
-			const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
-
-			string built_string = "";
-
-			built_string.append( first_number_token );
-			built_string.append( blank );
-			built_string.append( bigger_symbol );
-			built_string.append( blank );
-			built_string.append( second_number_token );
+			string built_string = compare_bigger_two_values( first_number_token, 
+											second_number_token, table );
 
 			strcpy( $<text>$, built_string.c_str() );
 
@@ -312,16 +304,8 @@ logical_expression:
 			pass in test it is necessary transform zero (false) in one (true). */
 		if( !first_number_type.compare( second_number_type ) )
 		{
-			const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
-			const string blank          = table.find_symbol_by_name( " " ).get_symbol_name();
-
-			string built_string = "";
-
-			built_string.append( first_number_token );
-			built_string.append( blank );
-			built_string.append( smaller_symbol );
-			built_string.append( blank );
-			built_string.append( second_number_token );
+			string built_string = compare_smaller_two_values( first_number_token, 
+											second_number_token, table );
 
 			strcpy( $<text>$, built_string.c_str() );
 
@@ -342,16 +326,8 @@ logical_expression:
 			pass in test it is necessary transform zero (false) in one (true). */
 		if( !first_number_type.compare( second_number_type ) )
 		{
-			const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
-			const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
-
-			string built_string = "";
-
-			built_string.append( first_number_token );
-			built_string.append( blank );
-			built_string.append( equality_symbol );
-			built_string.append( blank );
-			built_string.append( second_number_token );
+			string built_string = compare_equality_two_values( first_number_token, 
+											second_number_token, table );
 
 			strcpy( $<text>$, built_string.c_str() );
 
@@ -372,17 +348,9 @@ logical_expression:
 			pass in test it is necessary transform zero (false) in one (true). */
 		if( !first_number_type.compare( second_number_type ) )
 		{
-			const string diferent_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
-			const string blank           = table.find_symbol_by_name( " " ).get_symbol_name();
+			string built_string = compare_different_two_values( first_number_token, 
+											second_number_token, table );
 
-			string built_string = "";
-
-			built_string.append( first_number_token );
-			built_string.append( blank );
-			built_string.append( diferent_symbol );
-			built_string.append( blank );
-			built_string.append( second_number_token );
-			
 			strcpy( $<text>$, built_string.c_str() );
 
 		} else
@@ -404,16 +372,8 @@ logical_expression:
 				pass in test it is necessary transform zero (false) in one (true). */
 			if( !first_variable_type.compare( second_variable_type ) )
 			{
-				const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
-				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
-
-				string built_string = "";
-
-				built_string.append( first_variable_token );
-				built_string.append( blank );
-				built_string.append( bigger_symbol );
-				built_string.append( blank );
-				built_string.append( second_variable_token );
+				string built_string = compare_bigger_two_values( first_variable_token, 
+												second_variable_token, table );
 
 				strcpy( $<text>$, built_string.c_str() );
 
@@ -442,16 +402,8 @@ logical_expression:
 				pass in test it is necessary transform zero (false) in one (true). */
 			if( !first_variable_type.compare( second_variable_type ) )
 			{
-				const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
-				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
-
-				string built_string = "";
-
-				built_string.append( first_variable_token );
-				built_string.append( blank );
-				built_string.append( smaller_symbol );
-				built_string.append( blank );
-				built_string.append( second_variable_token );
+				string built_string = compare_smaller_two_values( first_variable_token, 
+												second_variable_token, table );
 
 				strcpy( $<text>$, built_string.c_str() );
 
@@ -480,16 +432,8 @@ logical_expression:
 				pass in test it is necessary transform zero (false) in one (true). */
 			if( !first_variable_type.compare( second_variable_type ) )
 			{
-				const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
-				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
-
-				string built_string = "";
-
-				built_string.append( first_variable_token );
-				built_string.append( blank );
-				built_string.append( equality_symbol );
-				built_string.append( blank );
-				built_string.append( second_variable_token );
+				string built_string = compare_equality_two_values( first_variable_token, 
+												second_variable_token, table );
 
 				strcpy( $<text>$, built_string.c_str() );
 
@@ -518,16 +462,8 @@ logical_expression:
 				pass in test it is necessary transform zero (false) in one (true). */
 			if( !first_variable_type.compare( second_variable_type ) )
 			{
-				const string different_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
-				const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
-
-				string built_string = "";
-
-				built_string.append( first_variable_token );
-				built_string.append( blank );
-				built_string.append( different_symbol );
-				built_string.append( blank );
-				built_string.append( second_variable_token );
+				string built_string = compare_different_two_values( first_variable_token, 
+												second_variable_token, table );
 
 				strcpy( $<text>$, built_string.c_str() );
 

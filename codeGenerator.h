@@ -25,4 +25,10 @@ string calculate_minus_expression( string, string );
 string calculate_times_expression( string, string );
 string calculate_divide_expression( string, string );
 
+string compare_different_two_values( string, string, SymbolTable& );
+string compare_equality_two_values( string, string, SymbolTable& );
+string compare_smaller_two_values( string, string, SymbolTable& );
+string compare_bigger_two_values( string, string, SymbolTable& );
+
 #endif
+

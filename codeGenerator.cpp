@@ -7,10 +7,13 @@
 #include <string>
 #include <vector>
 
+#include "messageAndLog.h"
 #include "codeGenerator.h"
 #include "checks.h"
 #include "Symbol.h"
 #include "SymbolTable.h"
+
+const bool KEY = ENABLE; // Key to define if the log is enable or disable.
 
 using namespace std;
 
@@ -477,5 +480,69 @@ string calculate_divide_expression( string dividend_token , string divisor_token
 	string result_division( division );
 
 	return result_division;
+}
+
+string compare_bigger_two_values( string first_value, string second_value, SymbolTable& table )
+{
+	const string bigger_symbol = table.find_symbol_by_name( ">" ).get_symbol_name();
+	const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( first_value );
+	built_string.append( blank );
+	built_string.append( bigger_symbol );
+	built_string.append( blank );
+	built_string.append( second_value );
+
+	return built_string;
+}
+
+string compare_smaller_two_values( string first_value, string second_value, SymbolTable& table )
+{
+	const string smaller_symbol = table.find_symbol_by_name( "<" ).get_symbol_name();
+	const string blank          = table.find_symbol_by_name( " " ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( first_value );
+	built_string.append( blank );
+	built_string.append( smaller_symbol );
+	built_string.append( blank );
+	built_string.append( second_value );
+
+	return built_string;
+}
+
+string compare_equality_two_values( string first_value, string second_value, SymbolTable& table )
+{
+	const string equality_symbol = table.find_symbol_by_name( "==" ).get_symbol_name();
+	const string blank         = table.find_symbol_by_name( " " ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( first_value );
+	built_string.append( blank );
+	built_string.append( equality_symbol );
+	built_string.append( blank );
+	built_string.append( second_value );
+
+	return built_string;
+}
+
+string compare_different_two_values( string first_value, string second_value, SymbolTable& table )
+{
+	const string different_symbol = table.find_symbol_by_name( "!=" ).get_symbol_name();
+	const string blank            = table.find_symbol_by_name( " " ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( first_value );
+	built_string.append( blank );
+	built_string.append( different_symbol );
+	built_string.append( blank );
+	built_string.append( second_value );
+
+	return built_string;
 }
 
