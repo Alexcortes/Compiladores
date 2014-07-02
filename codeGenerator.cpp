@@ -280,6 +280,39 @@ string scan_variable( const string variable_token, SymbolTable &table )
 	return built_string;
 }
 
+string calculate_expression( string first_parcel_token, string second_parcel_token, 
+									  string operator_token )
+{
+	char arithmetic_result[ 250 ];
+
+	if( !operator_token.compare( "+" ) )
+	{
+		string sum = calculate_plus_expression( first_parcel_token, second_parcel_token );
+		strcpy( arithmetic_result, sum.c_str() );
+
+	} else if( !operator_token.compare( "-" ) )
+	{
+		string difference = calculate_minus_expression( first_parcel_token, second_parcel_token );
+		strcpy( arithmetic_result, difference.c_str() );
+
+	} else if( !operator_token.compare( "*" ) )
+	{
+		string product = calculate_times_expression( first_parcel_token, second_parcel_token );
+		strcpy( arithmetic_result, product.c_str() );
+
+	} else if( !operator_token.compare( "/" ) )
+	{
+		string quotient = calculate_divide_expression( first_parcel_token, second_parcel_token );
+		strcpy( arithmetic_result, quotient.c_str() );
+		
+	} else
+	{
+		//Nothing To Do
+	}
+
+	return arithmetic_result;
+}
+
 string calculate_plus_expression( string first_parcel_token, string second_parcel_token )
 {
 	char sum[ 250 ];

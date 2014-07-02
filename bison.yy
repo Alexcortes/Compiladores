@@ -86,42 +86,37 @@ type:
 
 	};
 
+operator:
+	PLUS {
+		$<text>$ = $<text>1;
+
+	} | MINUS {
+		$<text>$ = $<text>1;
+
+	} | TIMES {
+		$<text>$ = $<text>1;
+
+	} | DIVIDE {
+		$<text>$ = $<text>1;
+
+	};
+
 /* Rule to define how to capture a line of math expression */
 math_expression:
 	NUMBER {
 		$<text>$ = $<text>1;
 
-	} | math_expression PLUS math_expression {
+	} | math_expression operator math_expression {
 
 		const string first_parcel_token( $<text>1 );
+		const string operator_token( $<text>2 );
 		const string second_parcel_token( $<text>3 );
 
-		string sum = calculate_plus_expression( first_parcel_token, second_parcel_token );
-		strcpy( $<text>$, sum.c_str() );
+		string result = calculate_expression( first_parcel_token, second_parcel_token,
+									operator_token );
 
-	} | math_expression MINUS math_expression {
+		strcpy( $<text>$, result.c_str() );
 
-		const string minuend_token( $<text>1 );
-		const string subtrahend_token( $<text>3 );
-
-		string difference = calculate_minus_expression( minuend_token, subtrahend_token );
-		strcpy( $<text>$, difference.c_str() );
-
-	} | math_expression TIMES math_expression {
-
-		const string first_factor_token( $<text>1 );
-		const string second_factor_token( $<text>3 );
-
-		string product = calculate_times_expression( first_factor_token, second_factor_token );
-		strcpy( $<text>$, product.c_str() );
-
-	} | math_expression DIVIDE math_expression {
-
-		const string first_factor_token( $<text>1 );
-		const string second_factor_token( $<text>3 );
-
-		string division = calculate_divide_expression( first_factor_token, second_factor_token );
-		strcpy( $<text>$, division.c_str() );
 	};
 
 
@@ -249,12 +244,16 @@ output:
 			string built_string = print_printable_value( printable_value_token, table );
 			cout << built_string;
 
+			strcpy( $<text>$, built_string.c_str() );
+
 		} else
 		{
 			if( table.exist_symbol( printable_value_token ) )
 			{
 				string built_string = print_printable_value( printable_value_token, table );
 				cout << built_string;
+
+				strcpy( $<text>$, built_string.c_str() );
 
 			} else
 			{
