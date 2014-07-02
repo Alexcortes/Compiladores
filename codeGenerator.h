@@ -18,6 +18,7 @@ string attribute_variable( string, string, SymbolTable& );
 
 string print_text( const string, SymbolTable& );
 string print_variable( const string, SymbolTable& );
+string print_printable_value( const string, SymbolTable& );
 string scan_variable( const string, SymbolTable& );
 
 string calculate_plus_expression( string, string );

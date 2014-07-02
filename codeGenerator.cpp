@@ -156,8 +156,52 @@ string attribute_variable( string variable_token, string value_token, SymbolTabl
 	return built_string;
 }
 
+string print_printable_value( const string printable_value_token, SymbolTable &table )
+{
+	log_message( "ENTROU NA FUNÇÃO print_printable_value", table, KEY );
+
+	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
+	const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
+	const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
+	const string printf            = table.find_symbol_by_name( "printf" ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( printf );
+	built_string.append( open_parenthesis );
+
+	if( printable_value_token[ 0 ] == '\"' )
+	{
+		built_string.append( printable_value_token );
+
+	} else
+	{
+		const string variable_type = table.find_symbol_by_name( printable_value_token )
+											.get_symbol_type();
+
+		const string reference_type    = check_variable_type( variable_type );
+		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
+		const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
+		const string marks = "\"";
+
+		built_string.append( marks );
+		built_string.append( reference_type );
+		built_string.append( marks );
+		built_string.append( comma );
+		built_string.append( blank );
+		built_string.append( printable_value_token );
+	}
+
+	built_string.append( close_parenthesis );
+	built_string.append( semi_colon );
+
+	return built_string;
+}
+
 string print_text( const string text_token, SymbolTable &table )
 {
+	log_message( "ENTROU NA FUNÇÃO print_text", table, KEY );
+
 	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 	const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
 	const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
@@ -176,6 +220,8 @@ string print_text( const string text_token, SymbolTable &table )
 
 string print_variable( const string variable_token, SymbolTable &table )
 {
+	log_message( "ENTROU NA FUNÇÃO print_variable", table, KEY );
+
 	const string variable_type = table.find_symbol_by_name( variable_token )
 											.get_symbol_type();
 

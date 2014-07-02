@@ -41,6 +41,7 @@
 
 %token PRINTF
 %token SCANF
+%token COMMA
 
 %token ATTRIBUTION
 
@@ -84,8 +85,6 @@ type:
 		$<text>$ = String;
 
 	};
-
-
 
 /* Rule to define how to capture a line of math expression */
 math_expression:
@@ -139,6 +138,20 @@ value:
 	math_expression
 	| text
 	| VARIABLE {
+		$<text>$ = $<text>1;
+
+	};
+
+/* Rule to reference variables ​​and text in a single rule called. The motivation 
+	comes from an effort to simplify the creation of rules involving the values ​​
+	of a variable. */
+printable_value:
+	text {
+		log_message( "ENTROU NA REGRA printable_value::text", table, KEY );
+
+	} | VARIABLE {
+		log_message( "ENTROU NA REGRA printable_value::VARIABLE", table, KEY );
+
 		$<text>$ = $<text>1;
 
 	};
@@ -226,28 +239,28 @@ attribution:
 
 /* Rule that defines how to print on screen texts, variable values​​, or both. */
 output:
-	 PRINTF text {
-		const string text_token( $<text>2 );
-		
-		string built_string = print_text( text_token, table );
-		cout << built_string;
+	 PRINTF printable_value {
+		log_message( "ENTROU NA REGRA output::PRINT printable_value", table, KEY );
 
-		strcpy( $<text>$, built_string.c_str() );
+		const string printable_value_token( $<text>2 );
 
-	} | PRINTF VARIABLE {
-		const string variable_token( $<text>2 );
-		
-		if( table.exist_symbol( variable_token ) )
-		{
-			string built_string = print_variable( variable_token, table );
+		if( printable_value_token[ 0 ] == '\"' )
+		{	
+			string built_string = print_printable_value( printable_value_token, table );
 			cout << built_string;
-
-			strcpy( $<text>$, built_string.c_str() );
 
 		} else
 		{
-			print_message_undeclared_variable();
-			return UNDECLARED_VARIABLE;
+			if( table.exist_symbol( printable_value_token ) )
+			{
+				string built_string = print_printable_value( printable_value_token, table );
+				cout << built_string;
+
+			} else
+			{
+				print_message_undeclared_variable();
+				return UNDECLARED_VARIABLE;
+			}
 		}
 	};
 
