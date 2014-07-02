@@ -35,7 +35,8 @@ BOOLEAN		{TRUE}|{FALSE}
 "leia"		return(SCANF);
 
 (?# Termos para expressões condicionais )
-"se"	return(IF);
+"se"		return(IF);
+"então"	return(THEN);
 
 (?# Identificadores matemáticos )
 "+" return(PLUS);

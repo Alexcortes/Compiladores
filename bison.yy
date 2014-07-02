@@ -63,6 +63,7 @@
 %token OR
 
 %token IF
+%token THEN
 
 %start program
 
@@ -87,7 +88,7 @@ type:
 
 	};
 
-logical_value:
+comparison_value:
 	NUMBER {
 		$<text>$ = $<text>1;
 
@@ -96,7 +97,7 @@ logical_value:
 
 	};
 
-logical_operator:
+comparison_operator:
 	BIGGER {
 		char bigger[] = ">";
 		$<text>$ = bigger;
@@ -115,8 +116,8 @@ logical_operator:
 
 	};
 
-logical_expression:
-	logical_value logical_operator logical_value {
+comparison_expression:
+	comparison_value comparison_operator comparison_value {
 		const string first_value_token( $<text>1 );
 		const string logical_operator_token( $<text>2 );
 		const string second_value_token( $<text>3 );
@@ -134,18 +135,18 @@ logical_expression:
 		strcpy( $<text>$, built_string.c_str() );
 	};
 
-comparison_operator:
+logical_operator:
 	AND{
-		char and[] = "&&";
-		$<text>$ = and;
+		char And[] = "&&";
+		$<text>$ = And;
 	} | OR {
-		char or[] = "||";
-		$<text>$ = or;
+		char Or[] = "||";
+		$<text>$ = Or;
 
 	};
 
-comparison_expression:
-	logical_expression comparison_operator logical_expression {
+logical_expression:
+	comparison_expression logical_operator comparison_expression {
 		const string first_value_token( $<text>1 );
 		const string comparison_operator_token( $<text>2 );
 		const string second_value_token( $<text>3 );
@@ -162,7 +163,7 @@ comparison_expression:
 
 		strcpy( $<text>$, built_string.c_str() );
 
-	} | logical_expression {
+	} | comparison_expression {
 		$<text>$ = $<text>1;
 	};
 
@@ -359,6 +360,15 @@ input:
 			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
+	};
+
+condition_expression:
+	IF logical_expression THEN {
+
+		const string logical_expression_token( $<text>2 );
+
+		string built_string = build_condition_expression( logical_expression_token, table );
+		cout << built_string;
 	};
 %%
 

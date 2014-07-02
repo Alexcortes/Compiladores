@@ -35,9 +35,12 @@ void initialize_symbol_table( SymbolTable &table )
 	Symbol s_and("&&");
 	Symbol s_or("||");
 	Symbol hashtag( "#" );
+	Symbol reference( "&" );
 
 	Symbol open_parenthesis( "(" );
 	Symbol close_parenthesis( ")" );
+	Symbol open_brace( "{" );
+	Symbol close_brace( "}" );
 
 	Symbol printf( "printf" );
 	Symbol scanf( "scanf" );
@@ -58,9 +61,12 @@ void initialize_symbol_table( SymbolTable &table )
 	table.insert_symbol( bigger );
 	table.insert_symbol( different );
 	table.insert_symbol( hashtag );
+	table.insert_symbol( reference );
 
 	table.insert_symbol( open_parenthesis );
 	table.insert_symbol( close_parenthesis );
+	table.insert_symbol( open_brace );
+	table.insert_symbol( close_brace );
 
 	table.insert_symbol( printf );
 	table.insert_symbol( scanf );
@@ -262,6 +268,7 @@ string scan_variable( const string variable_token, SymbolTable &table )
 	const string scanf             = table.find_symbol_by_name( "scanf" ).get_symbol_name();
 	const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
 	const string comma             = table.find_symbol_by_name( "," ).get_symbol_name();
+	const string reference         = table.find_symbol_by_name( "&" ).get_symbol_name();
 	const string marks = "\"";
 		
 	string built_string = "";
@@ -273,6 +280,7 @@ string scan_variable( const string variable_token, SymbolTable &table )
 	built_string.append( marks );
 	built_string.append( comma );
 	built_string.append( blank );
+	built_string.append( reference );
 	built_string.append( variable_token );
 	built_string.append( close_parenthesis );
 	built_string.append( semi_colon );
@@ -308,7 +316,7 @@ string calculate_expression( string first_parcel_token, string second_parcel_tok
 		
 	} else
 	{
-		//Nothing To Do
+		// TODO: Fazer tratamento quando o operador for inválido
 	}
 
 	return arithmetic_result;
@@ -560,6 +568,27 @@ string calculate_divide_expression( string dividend_token , string divisor_token
 	string result_division( division );
 
 	return result_division;
+}
+
+string build_condition_expression( string logical_expression_token, SymbolTable &table )
+{
+	const string IF = table.find_symbol_by_name( "if" ).get_symbol_name();
+	
+	const string open_brace = table.find_symbol_by_name( "{" ).get_symbol_name();
+	const string close_brace = table.find_symbol_by_name( "}" ).get_symbol_name();
+	const string open_parenthesis = table.find_symbol_by_name( "(" ).get_symbol_name();
+	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
+
+	string built_string = "";
+
+	built_string.append( IF );
+	built_string.append( open_parenthesis );
+	built_string.append( logical_expression_token );
+	built_string.append( close_parenthesis );
+	built_string.append( open_brace );
+	built_string.append( close_brace );
+
+	return built_string;
 }
 
 string compare_bigger_two_values( string first_value, string second_value, SymbolTable& table )
