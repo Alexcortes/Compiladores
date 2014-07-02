@@ -53,11 +53,12 @@
 %token MINUS
 %token DIVIDE
 %token TIMES
-%token EQUAL
 
+%token EQUAL
 %token BIGGER
 %token SMALLER
 %token DIFFERENT
+
 %token AND
 %token OR
 
@@ -86,24 +87,99 @@ type:
 
 	};
 
+logical_value:
+	NUMBER {
+		$<text>$ = $<text>1;
+
+	} | VARIABLE {
+		$<text>$ = $<text>1;
+
+	};
+
+logical_operator:
+	BIGGER {
+		char bigger[] = ">";
+		$<text>$ = bigger;
+
+	} | SMALLER {
+		char smaller[] = "<";
+		$<text>$ = smaller;
+
+	} | DIFFERENT {
+		char different[] = "!=";
+		$<text>$ = different;
+
+	} | EQUAL {
+		char equal[] = "==";
+		$<text>$ = equal;
+
+	};
+
+logical_expression:
+	logical_value logical_operator logical_value {
+		const string first_value_token( $<text>1 );
+		const string logical_operator_token( $<text>2 );
+		const string second_value_token( $<text>3 );
+
+		const string blank = table.find_symbol_by_name( " " ).get_symbol_name();
+
+		string built_string = "";
+
+		built_string.append( first_value_token );
+		built_string.append( blank );
+		built_string.append( logical_operator_token );
+		built_string.append( blank );
+		built_string.append( second_value_token );
+
+		strcpy( $<text>$, built_string.c_str() );
+	};
+
+comparison_operator:
+	AND{
+		char and[] = "&&";
+		$<text>$ = and;
+	} | OR {
+		char or[] = "||";
+		$<text>$ = or;
+
+	};
+
+comparison_expression:
+	logical_expression comparison_operator logical_expression {
+		const string first_value_token( $<text>1 );
+		const string comparison_operator_token( $<text>2 );
+		const string second_value_token( $<text>3 );
+
+		const string blank = table.find_symbol_by_name( " " ).get_symbol_name();
+
+		string built_string = "";
+
+		built_string.append( first_value_token );
+		built_string.append( blank );
+		built_string.append( comparison_operator_token );
+		built_string.append( blank );
+		built_string.append( second_value_token );
+
+		strcpy( $<text>$, built_string.c_str() );
+
+	} | logical_expression {
+		$<text>$ = $<text>1;
+	};
+
 operator:
 	PLUS {
-		log_message( "Entrou em operator:: PLUS", table, KEY );
 		char Plus[] = "+";
 		$<text>$ = Plus;
 
 	} | MINUS {
-		log_message( "Entrou em operator::MINUS", table, KEY );
 		char Minus[] = "-";
 		$<text>$ = Minus;
 
 	} | TIMES {
-		log_message( "Entrou em operator::TIMES", table, KEY );
 		char Times[] = "*";
 		$<text>$ = Times;
 
 	} | DIVIDE {
-		log_message( "Entrou em operator::DIVIDE", table, KEY );
 		char Divide[] = "/";
 		$<text>$ = Divide;
 
@@ -112,13 +188,10 @@ operator:
 /* Rule to define how to capture a line of math expression */
 math_expression:
 	NUMBER {
-		log_message( "Entrou em math_expression:: NUMBER", table, KEY );
 
 		$<text>$ = $<text>1;
 
 	} | math_expression operator math_expression {
-
-		log_message( "Entrou em math_expression:: operator", table, KEY );
 
 		const string first_parcel_token( $<text>1 );
 		const string operator_token( $<text>2 );
@@ -154,11 +227,7 @@ value:
 	of a variable. */
 printable_value:
 	text {
-		log_message( "ENTROU NA REGRA printable_value::text", table, KEY );
-
 	} | VARIABLE {
-		log_message( "ENTROU NA REGRA printable_value::VARIABLE", table, KEY );
-
 		$<text>$ = $<text>1;
 
 	};
@@ -247,8 +316,6 @@ attribution:
 /* Rule that defines how to print on screen texts, variable values​​, or both. */
 output:
 	 PRINTF printable_value {
-		log_message( "ENTROU NA REGRA output::PRINT printable_value", table, KEY );
-
 		const string printable_value_token( $<text>2 );
 
 		if( printable_value_token[ 0 ] == '\"' )
@@ -292,267 +359,6 @@ input:
 			print_message_undeclared_variable();
 			return UNDECLARED_VARIABLE;
 		}
-	};
-
-logical_expression:
-		NUMBER BIGGER NUMBER {
-		const string first_number_token( $<text>1 );
-		const string second_number_token( $<text>3 );
-
-		const string first_number_type  = check_value_type( first_number_token );
-		const string second_number_type = check_value_type( second_number_token );
-
-		/* The function string::compare() return zero if the strings are equal. So, to 
-			pass in test it is necessary transform zero (false) in one (true). */
-		if( !first_number_type.compare( second_number_type ) )
-		{
-			string built_string = compare_bigger_two_values( first_number_token, 
-											second_number_token, table );
-
-			strcpy( $<text>$, built_string.c_str() );
-
-		} else
-		{
-			print_message_impossible_comparison();
-			return IMPOSSIBLE_COMPARISON;
-		}
-
-	} | NUMBER SMALLER NUMBER {
-		const string first_number_token( $<text>1 );
-		const string second_number_token( $<text>3 );
-
-		const string first_number_type  = check_value_type( first_number_token );
-		const string second_number_type = check_value_type( second_number_token );
-
-		/* The function string::compare() return zero if the strings are equal. So, to 
-			pass in test it is necessary transform zero (false) in one (true). */
-		if( !first_number_type.compare( second_number_type ) )
-		{
-			string built_string = compare_smaller_two_values( first_number_token, 
-											second_number_token, table );
-
-			strcpy( $<text>$, built_string.c_str() );
-
-		} else
-		{
-			print_message_impossible_comparison();
-			return IMPOSSIBLE_COMPARISON;
-		}
-
-	} | NUMBER EQUAL NUMBER {
-		const string first_number_token( $<text>1 );
-		const string second_number_token( $<text>3 );
-
-		const string first_number_type  = check_value_type( first_number_token );
-		const string second_number_type = check_value_type( second_number_token );
-
-		/* The function string::compare() return zero if the strings are equal. So, to 
-			pass in test it is necessary transform zero (false) in one (true). */
-		if( !first_number_type.compare( second_number_type ) )
-		{
-			string built_string = compare_equality_two_values( first_number_token, 
-											second_number_token, table );
-
-			strcpy( $<text>$, built_string.c_str() );
-
-		} else
-		{
-			print_message_impossible_comparison();
-			return IMPOSSIBLE_COMPARISON;
-		}
-
-	} | NUMBER DIFFERENT NUMBER {
-		const string first_number_token( $<text>1 );
-		const string second_number_token( $<text>3 );
-
-		const string first_number_type  = check_value_type( first_number_token );
-		const string second_number_type = check_value_type( second_number_token );
-
-		/* The function string::compare() return zero if the strings are equal. So, to 
-			pass in test it is necessary transform zero (false) in one (true). */
-		if( !first_number_type.compare( second_number_type ) )
-		{
-			string built_string = compare_different_two_values( first_number_token, 
-											second_number_token, table );
-
-			strcpy( $<text>$, built_string.c_str() );
-
-		} else
-		{
-			print_message_impossible_comparison();
-			return IMPOSSIBLE_COMPARISON;
-		}
-	
-	} | VARIABLE BIGGER VARIABLE {
-		const string first_variable_token( $<text>1 );
-		const string second_variable_token( $<text>3 );
-
-		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
-		{
-			const string first_variable_type  = check_value_type( first_variable_token );
-			const string second_variable_type = check_value_type( second_variable_token );
-
-			/* The function string::compare() return zero if the strings are equal. So, to 
-				pass in test it is necessary transform zero (false) in one (true). */
-			if( !first_variable_type.compare( second_variable_type ) )
-			{
-				string built_string = compare_bigger_two_values( first_variable_token, 
-												second_variable_token, table );
-
-				strcpy( $<text>$, built_string.c_str() );
-
-			} else
-			{
-				print_message_impossible_comparison();
-				return IMPOSSIBLE_COMPARISON;
-			}
-
-		} else
-		{
-			print_message_undeclared_variable();
-			return UNDECLARED_VARIABLE;
-		}
-
-	} | VARIABLE SMALLER VARIABLE {
-		const string first_variable_token( $<text>1 );
-		const string second_variable_token( $<text>3 );
-
-		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
-		{
-			const string first_variable_type  = check_value_type( first_variable_token );
-			const string second_variable_type = check_value_type( second_variable_token );
-
-			/* The function string::compare() return zero if the strings are equal. So, to 
-				pass in test it is necessary transform zero (false) in one (true). */
-			if( !first_variable_type.compare( second_variable_type ) )
-			{
-				string built_string = compare_smaller_two_values( first_variable_token, 
-												second_variable_token, table );
-
-				strcpy( $<text>$, built_string.c_str() );
-
-			} else
-			{
-				print_message_impossible_comparison();
-				return IMPOSSIBLE_COMPARISON;
-			}
-
-		} else
-		{
-			print_message_undeclared_variable();
-			return UNDECLARED_VARIABLE;
-		}
-
-	} | VARIABLE EQUAL VARIABLE {
-		const string first_variable_token( $<text>1 );
-		const string second_variable_token( $<text>3 );
-
-		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
-		{
-			const string first_variable_type  = check_value_type( first_variable_token );
-			const string second_variable_type = check_value_type( second_variable_token );
-
-			/* The function string::compare() return zero if the strings are equal. So, to 
-				pass in test it is necessary transform zero (false) in one (true). */
-			if( !first_variable_type.compare( second_variable_type ) )
-			{
-				string built_string = compare_equality_two_values( first_variable_token, 
-												second_variable_token, table );
-
-				strcpy( $<text>$, built_string.c_str() );
-
-			} else
-			{
-				print_message_impossible_comparison();
-				return IMPOSSIBLE_COMPARISON;
-			}
-
-		} else
-		{
-			print_message_undeclared_variable();
-			return UNDECLARED_VARIABLE;
-		}
-
-	} | VARIABLE DIFFERENT VARIABLE {
-		const string first_variable_token( $<text>1 );
-		const string second_variable_token( $<text>3 );
-
-		if( table.exist_symbol( first_variable_token ) && table.exist_symbol( second_variable_token ) )
-		{
-			const string first_variable_type  = check_value_type( first_variable_token );
-			const string second_variable_type = check_value_type( second_variable_token );
-
-			/* The function string::compare() return zero if the strings are equal. So, to 
-				pass in test it is necessary transform zero (false) in one (true). */
-			if( !first_variable_type.compare( second_variable_type ) )
-			{
-				string built_string = compare_different_two_values( first_variable_token, 
-												second_variable_token, table );
-
-				strcpy( $<text>$, built_string.c_str() );
-
-			} else
-			{
-				print_message_impossible_comparison();
-				return IMPOSSIBLE_COMPARISON;
-			}
-
-		} else
-		{
-			print_message_undeclared_variable();
-			return UNDECLARED_VARIABLE;
-		}
-	};
-
-condition_expression:
-	IF VARIABLE {
-		const string variable_token( $<text>2 );
-
-		if( table.exist_symbol( variable_token ) )
-		{
-			const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-			const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-			const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-			const string If		       	 = table.find_symbol_by_name( "if" ).get_symbol_name();
-		
-			string built_string = "";
-
-			built_string.append( If );
-			built_string.append( open_parenthesis );
-			built_string.append( blank );
-			built_string.append( variable_token );
-			built_string.append( blank );
-			built_string.append( close_parenthesis );
-
-			cout << built_string;
-
-			strcpy( $<text>$, built_string.c_str() );
-		} else
-		{
-			print_message_undeclared_variable();
-			return UNDECLARED_VARIABLE;
-		}
-
-	} | IF logical_expression{
-		const string logical_expression_token( $<text>2 );
-
-		const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
-		const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
-		const string blank             = table.find_symbol_by_name( " " ).get_symbol_name();
-		const string If		       	 = table.find_symbol_by_name( "if" ).get_symbol_name();	
-		
-		string built_string = "";
-
-		built_string.append( If );
-		built_string.append( open_parenthesis );
-		built_string.append( blank );
-		built_string.append( logical_expression_token );
-		built_string.append( blank );
-		built_string.append( close_parenthesis );	
-
-		cout << built_string;
-
-		strcpy( $<text>$, built_string.c_str() );
 	};
 %%
 

@@ -39,12 +39,12 @@ BOOLEAN		{TRUE}|{FALSE}
 
 (?# Identificadores matemáticos )
 "+" return(PLUS);
-"=" return(EQUAL);
 "-" return(MINUS);
 "/" return(DIVIDE);
 "*" return(TIMES);
 
 (?# Identificadores lógicos)
+"=" return(EQUAL);
 ">" return(BIGGER);
 "<" return(SMALLER);
 "<>" return(DIFFERENT);
