@@ -283,6 +283,7 @@ string scan_variable( const string variable_token, SymbolTable &table )
 string calculate_expression( string first_parcel_token, string second_parcel_token, 
 									  string operator_token )
 {
+	cout << "Entrou em calculate_expression" << endl;
 	char arithmetic_result[ 250 ];
 
 	if( !operator_token.compare( "+" ) )

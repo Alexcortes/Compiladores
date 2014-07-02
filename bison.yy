@@ -88,25 +88,37 @@ type:
 
 operator:
 	PLUS {
-		$<text>$ = $<text>1;
+		log_message( "Entrou em operator:: PLUS", table, KEY );
+		char Plus[] = "+";
+		$<text>$ = Plus;
 
 	} | MINUS {
-		$<text>$ = $<text>1;
+		log_message( "Entrou em operator::MINUS", table, KEY );
+		char Minus[] = "-";
+		$<text>$ = Minus;
 
 	} | TIMES {
-		$<text>$ = $<text>1;
+		log_message( "Entrou em operator::TIMES", table, KEY );
+		char Times[] = "*";
+		$<text>$ = Times;
 
 	} | DIVIDE {
-		$<text>$ = $<text>1;
+		log_message( "Entrou em operator::DIVIDE", table, KEY );
+		char Divide[] = "/";
+		$<text>$ = Divide;
 
 	};
 
 /* Rule to define how to capture a line of math expression */
 math_expression:
 	NUMBER {
+		log_message( "Entrou em math_expression:: NUMBER", table, KEY );
+
 		$<text>$ = $<text>1;
 
 	} | math_expression operator math_expression {
+
+		log_message( "Entrou em math_expression:: operator", table, KEY );
 
 		const string first_parcel_token( $<text>1 );
 		const string operator_token( $<text>2 );
