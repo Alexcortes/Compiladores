@@ -164,8 +164,6 @@ string attribute_variable( string variable_token, string value_token, SymbolTabl
 
 string print_printable_value( const string printable_value_token, SymbolTable &table )
 {
-	log_message( "ENTROU NA FUNÇÃO print_printable_value", table, KEY );
-
 	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 	const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
 	const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
@@ -206,8 +204,6 @@ string print_printable_value( const string printable_value_token, SymbolTable &t
 
 string print_text( const string text_token, SymbolTable &table )
 {
-	log_message( "ENTROU NA FUNÇÃO print_text", table, KEY );
-
 	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 	const string open_parenthesis  = table.find_symbol_by_name( "(" ).get_symbol_name();
 	const string semi_colon        = table.find_symbol_by_name( ";" ).get_symbol_name();
@@ -226,8 +222,6 @@ string print_text( const string text_token, SymbolTable &table )
 
 string print_variable( const string variable_token, SymbolTable &table )
 {
-	log_message( "ENTROU NA FUNÇÃO print_variable", table, KEY );
-
 	const string variable_type = table.find_symbol_by_name( variable_token )
 											.get_symbol_type();
 
@@ -291,7 +285,6 @@ string scan_variable( const string variable_token, SymbolTable &table )
 string calculate_expression( string first_parcel_token, string second_parcel_token, 
 									  string operator_token )
 {
-	cout << "Entrou em calculate_expression" << endl;
 	char arithmetic_result[ 250 ];
 
 	if( !operator_token.compare( "+" ) )
@@ -570,7 +563,8 @@ string calculate_divide_expression( string dividend_token , string divisor_token
 	return result_division;
 }
 
-string build_condition_expression( string logical_expression_token, SymbolTable &table )
+string build_condition_expression( string logical_expression_token, string block_token,
+										     SymbolTable &table )
 {
 	const string IF = table.find_symbol_by_name( "if" ).get_symbol_name();
 	
@@ -585,8 +579,8 @@ string build_condition_expression( string logical_expression_token, SymbolTable 
 	built_string.append( open_parenthesis );
 	built_string.append( logical_expression_token );
 	built_string.append( close_parenthesis );
-	built_string.append( open_brace );
-	built_string.append( close_brace );
+	built_string.append( "\n" );
+	built_string.append( block_token );
 
 	return built_string;
 }

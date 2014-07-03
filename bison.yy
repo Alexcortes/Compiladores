@@ -21,6 +21,7 @@
 
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
 	const bool KEY = ENABLE; // Key to define if the log is enable or disable.
+	bool BLOCK_KEY = ENABLE;
 %}
 
 %union{
@@ -64,6 +65,7 @@
 
 %token IF
 %token THEN
+%token ENDIF
 
 %start program
 
@@ -244,6 +246,12 @@ content_program:
 	NEWLINE { printf("\n"); }
 	| begin_of_program
 	| end_of_program
+	| content_block
+	| block
+	;
+
+content_block:
+	NEWLINE { printf("\n"); }
 	| declaration
 	| attribution
 	| output
@@ -318,11 +326,17 @@ attribution:
 output:
 	 PRINTF printable_value {
 		const string printable_value_token( $<text>2 );
-
+			
 		if( printable_value_token[ 0 ] == '\"' )
 		{	
 			string built_string = print_printable_value( printable_value_token, table );
-			cout << built_string;
+			
+			if( BLOCK_KEY )
+			{
+				cout << built_string;
+			} else {
+				// Nothing To Do
+			}
 
 			strcpy( $<text>$, built_string.c_str() );
 
@@ -331,7 +345,13 @@ output:
 			if( table.exist_symbol( printable_value_token ) )
 			{
 				string built_string = print_printable_value( printable_value_token, table );
+				
+			if( BLOCK_KEY )
+			{
 				cout << built_string;
+			} else {
+				// Nothing To Do
+			}
 
 				strcpy( $<text>$, built_string.c_str() );
 
@@ -362,12 +382,45 @@ input:
 		}
 	};
 
+begin_block:
+	THEN {
+		char Open_brace[] = "{";
+		$<text>$ = Open_brace;
+	};
+
+end_block:
+	ENDIF {
+		char Close_brace[] = "}";
+		$<text>$ = Close_brace;
+	};
+
+block:
+	NEWLINE { printf("\n"); }
+	| begin_block content_block end_block {
+		BLOCK_KEY = ENABLE;
+
+		const string begin_block_token( $<text>1 );
+		const string content_block_token( $<text>2 );
+		const string end_block_token( $<text>3 );
+
+		string built_string = "";
+
+		built_string.append( begin_block_token );
+		built_string.append( "\n" );
+		built_string.append( content_block_token );
+		built_string.append( "\n" );
+		built_string.append( end_block_token );
+
+		strcpy( $<text>$, built_string.c_str() );
+	};
+
 condition_expression:
-	IF logical_expression THEN {
-
+	IF logical_expression { BLOCK_KEY = DISABLE; } block {
 		const string logical_expression_token( $<text>2 );
+		const string block_token( $<text>4 );
 
-		string built_string = build_condition_expression( logical_expression_token, table );
+		string built_string = build_condition_expression( logical_expression_token, block_token, 
+																		  table );
 		cout << built_string;
 	};
 %%

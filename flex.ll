@@ -37,6 +37,7 @@ BOOLEAN		{TRUE}|{FALSE}
 (?# Termos para expressões condicionais )
 "se"		return(IF);
 "então"	return(THEN);
+"fim-se" return(ENDIF);
 
 (?# Identificadores matemáticos )
 "+" return(PLUS);
