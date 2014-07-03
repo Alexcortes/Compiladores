@@ -22,6 +22,7 @@
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
 	const bool KEY = ENABLE; // Key to define if the log is enable or disable.
 	bool BLOCK_KEY = ENABLE;
+	int identation = 0;
 %}
 
 %union{
@@ -70,6 +71,14 @@
 %start program
 
 %%
+
+do_identation: {
+	for( int i = 0; i < identation; i++ )
+	{
+		cout << "\t";
+	}
+};
+
 /* Rule to capture the type of variables. */
 type:
 	TYPE_INT {
@@ -238,7 +247,7 @@ printable_value:
 /* Rule that starts the program. */
 program:
 	/* Empty rule. */
-	| program content_program
+	| program content_identation
 	;
 
 /* Rule that defines what can be the content of a program. */
@@ -251,25 +260,31 @@ content_program:
 	;
 
 content_block:
-	NEWLINE { printf("\n"); }
-	| declaration
+	declaration
 	| attribution
 	| output
 	| input
 	| condition_expression
 	;
 
+content_identation:
+	do_identation content_program
+	| do_identation content_program content_identation
+	;
+
 /* Rule that starts the program. There are two essential things are set to the proper 
 	functioning of the compiler and program to be generated: the symbols begins compiler) 
 	and the inclusion of libraries and definition of the main function. */
 begin_of_program:
-	START {
+	START do_identation {
+		identation++;
 		start_program( table );
 	};
 
 /* Rule to terminate the program. */
 end_of_program:
-	END {
+	END { identation--; } do_identation {
+
 		end_program();
 	};
 
@@ -397,12 +412,16 @@ input:
 begin_block:
 	THEN {
 		char Open_brace[] = "{";
+
+		identation++;
+
 		$<text>$ = Open_brace;
 	};
 
 end_block:
 	ENDIF {
 		char Close_brace[] = "}";
+		identation--;
 		$<text>$ = Close_brace;
 	};
 
