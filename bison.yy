@@ -21,8 +21,8 @@
 
 	SymbolTable table;	// Declaration of the symbol table used throughout the program.
 	const bool KEY = ENABLE; // Key to define if the log is enable or disable.
-	bool BLOCK_KEY = ENABLE;
-	int identation = 0;
+	bool BLOCK_KEY = ENABLE; // Key to define if the capacity of print is enable or disable.
+	int identation = 0; // Variable to define the quantity of tabs
 %}
 
 %union{
@@ -72,6 +72,7 @@
 
 %%
 
+/* This rule do the identation in the code. */
 do_identation: {
 	for( int i = 0; i < identation; i++ )
 	{
@@ -99,6 +100,7 @@ type:
 
 	};
 
+/* This rule define which the possible values of comparison. */
 comparison_value:
 	NUMBER {
 		$<text>$ = $<text>1;
@@ -108,6 +110,7 @@ comparison_value:
 
 	};
 
+/* This rule define which the possible operators of comparison. */
 comparison_operator:
 	BIGGER {
 		char bigger[] = ">";
@@ -127,6 +130,7 @@ comparison_operator:
 
 	};
 
+/* This rule define the expression of comparison. */
 comparison_expression:
 	comparison_value comparison_operator comparison_value {
 		const string first_value_token( $<text>1 );
@@ -146,6 +150,7 @@ comparison_expression:
 		strcpy( $<text>$, built_string.c_str() );
 	};
 
+/* This rule define which the possible logical operators. */
 logical_operator:
 	AND{
 		char And[] = "&&";
@@ -156,6 +161,7 @@ logical_operator:
 
 	};
 
+/* This rule define which the logical expression. */
 logical_expression:
 	comparison_expression logical_operator comparison_expression {
 		const string first_value_token( $<text>1 );
@@ -178,6 +184,7 @@ logical_expression:
 		$<text>$ = $<text>1;
 	};
 
+/* Define the math operators. */
 operator:
 	PLUS {
 		char Plus[] = "+";
@@ -259,6 +266,7 @@ content_program:
 	| block
 	;
 
+/* Rule that defines what can be the content of a block of instructions. */
 content_block:
 	declaration
 	| attribution
@@ -409,22 +417,22 @@ input:
 		}
 	};
 
+/* Rule that defines what can be a openning symbol of a block. */
 begin_block:
 	THEN {
 		char Open_brace[] = "{";
-
-		identation++;
-
 		$<text>$ = Open_brace;
 	};
 
+/* Rule that defines what can be a closing symbol of a block. */
 end_block:
-	ENDIF {
+	ENDIF{ identation--; } do_identation {
 		char Close_brace[] = "}";
-		identation--;
+
 		$<text>$ = Close_brace;
 	};
 
+/* Rule that define what is a block. */
 block:
 	begin_block content_block end_block {
 		BLOCK_KEY = ENABLE;
@@ -434,16 +442,35 @@ block:
 		const string end_block_token( $<text>3 );
 
 		string built_string = "";
+		string identation_string = "";
 
+		for( int i = 0; i <= identation; i++ )
+		{
+			identation_string.append( "\t" );
+		}
+
+		built_string.append( identation_string );
 		built_string.append( begin_block_token );
 		built_string.append( "\n" );
+		built_string.append( identation_string );
+		built_string.append( "\t" );
 		built_string.append( content_block_token );
 		built_string.append( "\n" );
+		built_string.append( identation_string );
 		built_string.append( end_block_token );
 
 		strcpy( $<text>$, built_string.c_str() );
+
+	} | content_block end_block {
+		print_message_not_declaration_then();
+		return NOT_DECLARATION_THEN;
+
+	} | begin_block content_block {
+		print_message_block_not_closed();
+		return BLOCK_NOT_CLOSED;
 	};
 
+/* Rule that define the condition statement. */
 condition_expression:
 	IF logical_expression { BLOCK_KEY = DISABLE; } block {
 		const string logical_expression_token( $<text>2 );
@@ -452,6 +479,10 @@ condition_expression:
 		string built_string = build_condition_expression( logical_expression_token, block_token, 
 																		  table );
 		cout << built_string;
+
+	} | IF logical_expression {
+		print_message_block_undeclared();
+		return BLOCK_UNDECLARED;
 	};
 %%
 
