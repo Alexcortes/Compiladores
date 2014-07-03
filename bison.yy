@@ -305,7 +305,13 @@ attribution:
 			if( !type.compare( value_type ) )
 			{
 				string built_string = attribute_variable( variable_token, value_token, table );
-				cout << built_string;
+
+				if( BLOCK_KEY )
+				{
+					cout << built_string;
+				} else {
+					// Nothing To Do
+				}				
 
 				strcpy( $<text>$, built_string.c_str() );
 
@@ -371,7 +377,13 @@ input:
 		if( table.exist_symbol( variable_token ) )
 		{
 			string built_string = scan_variable( variable_token, table );
-			cout << built_string;
+
+			if( BLOCK_KEY )
+			{
+				cout << built_string;
+			} else {
+				// Nothing To Do
+			}
 
 			strcpy( $<text>$, built_string.c_str() );
 
@@ -395,8 +407,7 @@ end_block:
 	};
 
 block:
-	NEWLINE { printf("\n"); }
-	| begin_block content_block end_block {
+	begin_block content_block end_block {
 		BLOCK_KEY = ENABLE;
 
 		const string begin_block_token( $<text>1 );

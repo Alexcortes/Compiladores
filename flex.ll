@@ -15,7 +15,7 @@ CHARACTER	[a-zA-Z]
 LITERAL		\"[a-zA-Z0-9][a-zA-Z0-9].*\"
 
 IDENTIFIER	_?[a-zA-Z0-9][a-zA-Z0-9]*
-WHITESPACE	[ ]+
+WHITESPACE	[ \t]+
 
 TRUE			[1]|"verdadeiro"
 FALSE			[0]|"falso"
@@ -61,6 +61,10 @@ BOOLEAN		{TRUE}|{FALSE}
 "\n" return(NEWLINE);
 "inicio" return(START);
 "final" return(END);
+
+{WHITESPACE} { 
+	/*IGNORE*/ 
+}
 
 {REAL} {
 	yylval.text = strdup(yytext);
