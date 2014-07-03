@@ -67,6 +67,12 @@
 %token THEN
 %token ENDIF
 
+%token FOR
+%token FROM
+%token TO
+%token STEP
+%token WHILE
+
 %start program
 
 %%
@@ -259,6 +265,8 @@ content_block:
 	| condition_expression
 	;
 
+
+	
 /* Rule that starts the program. There are two essential things are set to the proper 
 	functioning of the compiler and program to be generated: the symbols begins compiler) 
 	and the inclusion of libraries and definition of the main function. */
@@ -406,6 +414,7 @@ end_block:
 		$<text>$ = Close_brace;
 	};
 
+
 block:
 	begin_block content_block end_block {
 		BLOCK_KEY = ENABLE;
@@ -423,7 +432,20 @@ block:
 		built_string.append( end_block_token );
 
 		strcpy( $<text>$, built_string.c_str() );
-	};
+	}
+	
+
+repetition_expression:
+	WHILE logical_expression { BLOCK_KEY = DISABLE; } block {
+		const string logical_expression_token( $<text>2 );
+		const string block_token( $<text>4 );
+
+		string built_string = build_repetition_expression
+( logical_expression_token, block_token, table);
+
+		
+		cout << built_string;
+};
 
 condition_expression:
 	IF logical_expression { BLOCK_KEY = DISABLE; } block {

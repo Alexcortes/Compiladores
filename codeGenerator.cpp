@@ -46,6 +46,7 @@ void initialize_symbol_table( SymbolTable &table )
 	Symbol scanf( "scanf" );
 	Symbol include( "include" );
 	Symbol If( "if" );
+	Symbol While( "while" );
 
 	table.insert_symbol( comma );
 	table.insert_symbol( semi_colon );
@@ -72,6 +73,7 @@ void initialize_symbol_table( SymbolTable &table )
 	table.insert_symbol( scanf );
 	table.insert_symbol( include );
 	table.insert_symbol( If );
+	table.insert_symbol( While );
 }
 
 void start_program( SymbolTable &table )
@@ -563,13 +565,39 @@ string calculate_divide_expression( string dividend_token , string divisor_token
 	return result_division;
 }
 
+string build_repetition_expression( string logical_expression_token, string
+block_token,
+
+SymbolTable &table)
+{
+	const string WHILE = table.find_symbol_by_name( "while" ).get_symbol_name();
+	const string open_brace = table.find_symbol_by_name( "{"
+).get_symbol_name();
+	const string close_brace = table.find_symbol_by_name( "}"
+).get_symbol_name();
+	const string open_parenthesis = table.find_symbol_by_name( "("
+).get_symbol_name();
+	const string close_parenthesis = table.find_symbol_by_name( ")"
+).get_symbol_name();
+
+	string built_string = "";
+ 	built_string.append( WHILE );
+	built_string.append( open_parenthesis );
+	built_string.append( logical_expression_token );
+	built_string.append( close_parenthesis );
+	built_string.append( "\n" );
+	built_string.append( block_token );
+
+	return built_string;
+}
+ 
 string build_condition_expression( string logical_expression_token, string block_token,
 										     SymbolTable &table )
 {
 	const string IF = table.find_symbol_by_name( "if" ).get_symbol_name();
 	
 	const string open_brace = table.find_symbol_by_name( "{" ).get_symbol_name();
-	const string close_brace = table.find_symbol_by_name( "}" ).get_symbol_name();
+	const string close_brace = table.find_symbol_by_name( "}" ).get_symbol_name();	
 	const string open_parenthesis = table.find_symbol_by_name( "(" ).get_symbol_name();
 	const string close_parenthesis = table.find_symbol_by_name( ")" ).get_symbol_name();
 

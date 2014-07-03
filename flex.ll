@@ -39,7 +39,14 @@ BOOLEAN		{TRUE}|{FALSE}
 "então"	return(THEN);
 "fim-se" return(ENDIF);
 
-(?# Identificadores matemáticos )
+(?# Termos para estrutura de repetição )
+"para" return(FOR);
+"de"   return(FROM);
+"ate"  return(TO);
+"passo" return(STEP);
+"enquanto" return(WHILE);  
+
+ (?# Identificadores matemáticos )
 "+" return(PLUS);
 "-" return(MINUS);
 "/" return(DIVIDE);
